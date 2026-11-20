@@ -11,12 +11,12 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <header class="site"><div class="wrap">
 <a class="brand" href="#top">Nate Puangpanbut</a>
-<nav><a href="#quadbreak">QuadBreak</a><a href="#projects">Projects</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+<nav><a href="#quadbreak">QuadBreak</a><a href="#process">Process</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
 </div></header>
 
 <main class="wrap" id="top">
@@ -25,7 +25,7 @@
 <div class="eyebrow">Quantitative Researcher · Algorithmic Trading · ML</div>
 <h1>Trading systems that are tested hard before they trade.</h1>
 <p class="lead">I'm a quantitative researcher and data scientist with 10+ years of experience in machine learning, statistical modeling and optimization. I design, backtest and run algorithmic trading systems end to end, from a tick-level research engine in Python to a live MQL5 system, and I use agentic AI workflows to move from idea to tested result quickly.</p>
-<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn" href="files/resume.pdf?v=2" target="_blank">Download résumé</a></div>
+<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn" href="files/resume.pdf?v=3" target="_blank">Download résumé</a></div>
 <div class="socials">
 <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn ↗</a>
 <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio ↗</a>
@@ -53,15 +53,91 @@
 <p>QuadBreak is written in MQL5 and trades XAUUSD. It runs nine independent strategies as one portfolio, with position sizing that scales down when recent portfolio volatility rises. Every strategy and every rule in it was researched on a tick-level backtesting engine I built in Python, and had to pass the same out-of-sample tests before it went in. It is now forward-testing on a live account.</p>
 <p style="margin-bottom:0">Specific strategies and parameters are kept private. This page shows how the system was built and validated, and what it achieved.</p>
 
-<div class="tablewrap"><table class="results" aria-label="QuadBreak v1.60 simulated results">
-<thead><tr><th>Period</th><th>Role</th><th>Avg. monthly growth*</th><th>Max drawdown</th></tr></thead>
+<div class="kpis">
+<div><b>40.6%</b><span>Avg. monthly growth</span></div>
+<div><b>49.2%</b><span>Max drawdown</span></div>
+<div><b>3.08</b><span>Sharpe ratio</span></div>
+<div><b>10.3</b><span>Sortino ratio</span></div>
+<div><b>119</b><span>Calmar ratio</span></div>
+<div><b>1.39</b><span>Profit factor</span></div>
+<div><b>46%</b><span>Win rate</span></div>
+<div><b>1,678</b><span>Trades</span></div>
+<div><b>22 / 23</b><span>Profitable months</span></div>
+</div>
+<p class="note" style="margin-top:10px">Version 1.60 at its live setting (2.2% risk per strategy, volatility-targeted), simulated on tick data from Jan 2025 to Nov 12, 2026, starting from $1,000. Every stat uses the <b>raw-spread condition</b>, the weakest of the four tested. Sharpe and Sortino are annualized from daily returns. Calmar is the annualized compound return divided by max drawdown, and it's very large because gains compound monthly.</p>
+
+<h4 class="chart-title">Growth of $1,000 <span>log scale · four cost &amp; latency conditions</span></h4>
+<div class="legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Fixed 25-pt spread, +1 min and +5 min delays</div>
+<div class="chart-host" id="chart-equity" aria-label="Equity curve chart"></div>
+
+<h4 class="chart-title">Drawdown <span>raw-spread condition</span></h4>
+<div class="chart-host" id="chart-dd" aria-label="Drawdown chart"></div>
+
+<h4 class="chart-title">Monthly returns <span>raw-spread condition</span></h4>
+<div class="chart-host" id="chart-monthly" aria-label="Monthly returns chart"></div>
+
+<h4 class="chart-title">By period <span>each period starts fresh at $1,000; worst of the four conditions</span></h4>
+<div class="tablewrap"><table class="results" aria-label="QuadBreak v1.60 results by period">
+<thead><tr><th>Period</th><th>Role</th><th>Avg. monthly growth</th><th>Max drawdown</th></tr></thead>
 <tbody>
-<tr class="oos"><td>2025</td><td>Test</td><td class="num">42.6%</td><td class="num">~41%</td></tr>
-<tr><td>Jan – Jun 2026</td><td>Training</td><td class="num">47.4%</td><td class="num">~41%</td></tr>
-<tr class="oos"><td>Jul – Nov 2026</td><td>Test</td><td class="num">40.3%</td><td class="num">~41%</td></tr>
+<tr class="oos"><td>2025</td><td>Test</td><td class="num">37.0%</td><td class="num">51.7%</td></tr>
+<tr><td>Jan – Jun 2026</td><td>Training</td><td class="num">47.4%</td><td class="num">41.3%</td></tr>
+<tr class="oos"><td>Jul – Nov 12, 2026</td><td>Test</td><td class="num">36.8%</td><td class="num">39.7%</td></tr>
 </tbody>
 </table></div>
-<p class="note">*Version 1.60, simulated on tick data from a $1,000 start, measured in the <b>worst</b> of four cost and latency conditions for each period. Settings were chosen on the training period only. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+<p class="note">Settings were chosen on the training period only. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+</div>
+</section>
+
+<section id="process">
+<h2>How every idea is tested</h2>
+<p class="sub">The same pipeline for every idea, with pass/fail rules written down before the test data is looked at. Most ideas don't survive it.</p>
+<div class="pipeline">
+<div class="card"><h4>Pre-register</h4><p>Write the hypothesis, what will change, and the pass/fail rules before testing.</p></div>
+<div class="card"><h4>Fit on training data only</h4><p>Choose settings on Jan–Jun 2026. The test periods stay untouched.</p></div>
+<div class="card"><h4>12-condition stress battery</h4><p>Three periods × four conditions: fixed and raw spreads, and 1- and 5-minute execution delays.</p></div>
+<div class="card"><h4>Out-of-sample check</h4><p>Must hold up on 2025 and Jul–Nov 2026, the two periods it never saw.</p></div>
+<div class="card"><h4>Lookahead &amp; twin tests</h4><p>Check that no future data leaks in, and that results beat randomized "twin" versions of the same idea.</p></div>
+<div class="card"><h4>Independent re-implementation</h4><p>Code it a second time, separately, and confirm both produce the same signals.</p></div>
+<div class="card"><h4>Portfolio test</h4><p>Add it to the live portfolio and compare at matched drawdown. It must improve the whole, not just itself.</p></div>
+<div class="card"><h4>MQL5, tester, live</h4><p>Implement in the EA, verify in the MT5 tester, then forward-test on a live account.</p></div>
+</div>
+</section>
+
+<section>
+<h2>What the research looks like</h2>
+<p class="sub">A week of research logged in the experiment register, Nov 11–17, 2026.</p>
+<div class="funnel">
+<div class="card"><b>96</b><span>experiments, each with a written hypothesis, baseline and decision</span></div>
+<div class="card"><b>61</b><span>failed their pre-set rules and were dropped, including portfolio reweighting schemes (HERC, NCO, inverse volatility) that couldn't beat equal weighting at matched drawdown</span></div>
+<div class="card"><b>13</b><span>passed every gate and were adopted into QuadBreak</span></div>
+</div>
+</section>
+
+<section>
+<h2>Agentic AI research workflow</h2>
+<p class="sub">How I run research at this pace.</p>
+<div class="two">
+<div class="card box"><h3>LLM coding agents do the legwork</h3>
+<p>I direct LLM coding agents to implement each hypothesis in the research engine, run the full test battery, write the reports and update the experiment log. The pass/fail rules are fixed in the pre-registration, so the agents can't move the goalposts after seeing results.</p>
+<p style="margin:0">That is how 96 fully documented experiments fit into a single week.</p></div>
+<div class="card box"><h3>The research stack</h3>
+<p><b>Data:</b> 151M+ XAUUSD ticks (Dukascopy), Jan 2025 – Nov 2026, converted to a fast NumPy tick store and 1-minute bars.</p>
+<p><b>Engine:</b> a Python tick-level simulator with stops, targets, trailing exits, breakeven, pyramiding and session rules. The research codebase is 219 scripts, about 10,000 lines.</p>
+<p style="margin:0"><b>Execution:</b> MQL5 expert advisors in MetaTrader 5, running on a Windows VPS across multiple accounts.</p></div>
+</div>
+</section>
+
+<section>
+<h2>Version history</h2>
+<p class="sub">Each version shipped only after passing the pipeline above.</p>
+<div class="timeline2">
+<div class="v"><b>v1.00</b><span>First multi-strategy portfolio, built from fixed reward-to-risk research</span></div>
+<div class="v"><b>v1.20</b><span>Improved exits</span></div>
+<div class="v"><b>v1.30</b><span>Portfolio volatility targeting</span></div>
+<div class="v"><b>v1.40</b><span>Two new strategies, 7 in total</span></div>
+<div class="v"><b>v1.50</b><span>All 9 strategies combined at equal risk</span></div>
+<div class="v now"><b>v1.60</b><span>Volatility targeting across all 9 strategies. Now forward-testing on a live account</span></div>
 </div>
 </section>
 
@@ -129,61 +205,10 @@
 </div>
 </section>
 
-<section id="process">
-<h2>How every idea is tested</h2>
-<p class="sub">The same pipeline for every idea, with pass/fail rules written down before the test data is looked at. Most ideas don't survive it.</p>
-<div class="pipeline">
-<div class="card"><h4>Pre-register</h4><p>Write the hypothesis, what will change, and the pass/fail rules before testing.</p></div>
-<div class="card"><h4>Fit on training data only</h4><p>Choose settings on Jan–Jun 2026. The test periods stay untouched.</p></div>
-<div class="card"><h4>12-condition stress battery</h4><p>Three periods × four conditions: fixed and raw spreads, and 1- and 5-minute execution delays.</p></div>
-<div class="card"><h4>Out-of-sample check</h4><p>Must hold up on 2025 and Jul–Nov 2026, the two periods it never saw.</p></div>
-<div class="card"><h4>Lookahead &amp; twin tests</h4><p>Check that no future data leaks in, and that results beat randomized "twin" versions of the same idea.</p></div>
-<div class="card"><h4>Independent re-implementation</h4><p>Code it a second time, separately, and confirm both produce the same signals.</p></div>
-<div class="card"><h4>Portfolio test</h4><p>Add it to the live portfolio and compare at matched drawdown. It must improve the whole, not just itself.</p></div>
-<div class="card"><h4>MQL5, tester, live</h4><p>Implement in the EA, verify in the MT5 tester, then forward-test on a live account.</p></div>
-</div>
-</section>
-
-<section>
-<h2>What the research looks like</h2>
-<p class="sub">A week of research logged in the experiment register, Nov 11–17, 2026.</p>
-<div class="funnel">
-<div class="card"><b>96</b><span>experiments, each with a written hypothesis, baseline and decision</span></div>
-<div class="card"><b>61</b><span>failed their pre-set rules and were dropped, including portfolio reweighting schemes (HERC, NCO, inverse volatility) that couldn't beat equal weighting at matched drawdown</span></div>
-<div class="card"><b>13</b><span>passed every gate and were adopted into QuadBreak</span></div>
-</div>
-</section>
-
-<section>
-<h2>Agentic AI research workflow</h2>
-<p class="sub">How I run research at this pace.</p>
-<div class="two">
-<div class="card box"><h3>LLM coding agents do the legwork</h3>
-<p>I direct LLM coding agents to implement each hypothesis in the research engine, run the full test battery, write the reports and update the experiment log. The pass/fail rules are fixed in the pre-registration, so the agents can't move the goalposts after seeing results.</p>
-<p style="margin:0">That is how 96 fully documented experiments fit into a single week.</p></div>
-<div class="card box"><h3>The research stack</h3>
-<p><b>Data:</b> 151M+ XAUUSD ticks (Dukascopy), Jan 2025 – Nov 2026, converted to a fast NumPy tick store and 1-minute bars.</p>
-<p><b>Engine:</b> a Python tick-level simulator with stops, targets, trailing exits, breakeven, pyramiding and session rules. The research codebase is 219 scripts, about 10,000 lines.</p>
-<p style="margin:0"><b>Execution:</b> MQL5 expert advisors in MetaTrader 5, running on a Windows VPS across multiple accounts.</p></div>
-</div>
-</section>
-
-<section>
-<h2>Version history</h2>
-<p class="sub">Each version shipped only after passing the pipeline above.</p>
-<div class="timeline2">
-<div class="v"><b>v1.00</b><span>First multi-strategy portfolio, built from fixed reward-to-risk research</span></div>
-<div class="v"><b>v1.20</b><span>Improved exits</span></div>
-<div class="v"><b>v1.30</b><span>Portfolio volatility targeting</span></div>
-<div class="v"><b>v1.40</b><span>Two new strategies, 7 in total</span></div>
-<div class="v"><b>v1.50</b><span>All 9 strategies combined at equal risk</span></div>
-<div class="v now"><b>v1.60</b><span>Volatility targeting across all 9 strategies. Now forward-testing on a live account</span></div>
-</div>
-</section>
 
 <section id="experience">
 <h2>Experience</h2>
-<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=2" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
+<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=3" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
 <div class="timeline">
 <div class="job"><div class="when">10/2025 – present</div><div>
 <h3>Data Analyst</h3><div class="org">Meta (via Tundra Technical Solutions) · Vancouver, BC</div>
@@ -244,5 +269,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script src="charts.js?v=2"></script>
 </body>
 </html>
