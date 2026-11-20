@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nate Puangpanbut | Quantitative Researcher</title>
+<meta name="description" content="Quantitative researcher building and validating algorithmic trading systems: QuadBreak, a multi-strategy XAUUSD system with a tick-level Python research engine and agentic AI research workflow.">
+<meta property="og:title" content="Nate Puangpanbut | Quantitative Researcher">
+<meta property="og:description" content="QuadBreak: a multi-strategy algorithmic trading system for gold, built on a tick-level research engine and validated out-of-sample.">
+<meta property="og:image" content="https://suraporn.github.io/quant/images/profile.jpg">
+<link rel="icon" href="images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="#top">Nate Puangpanbut</a>
+<nav><a href="#quadbreak">QuadBreak</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<main class="wrap" id="top">
+<section class="hero" style="padding-bottom:24px">
+<div>
+<div class="eyebrow">Quantitative Researcher · Algorithmic Trading · ML</div>
+<h1>Trading systems that are tested hard before they trade.</h1>
+<p class="lead">I'm a quantitative researcher and data scientist with 10+ years of experience in machine learning, statistical modeling and optimization. I design, backtest and run algorithmic trading systems end to end, from a tick-level research engine in Python to a live MQL5 system, and I use agentic AI workflows to move from idea to tested result quickly.</p>
+<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn" href="files/resume.pdf?v=1" target="_blank">Download résumé</a></div>
+<div class="socials">
+<a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn ↗</a>
+<a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio ↗</a>
+<a href="mailto:nate.puangpanbut@gmail.com">Email</a>
+</div>
+</div>
+<div class="avatar"><span>NP</span><img src="images/profile.jpg" alt="Nate Puangpanbut" onerror="this.remove()"></div>
+</section>
+
+<div class="stats">
+<div><b>151M+</b><span>gold ticks in the research engine</span></div>
+<div><b>96</b><span>pre-registered experiments</span></div>
+<div><b>61</b><span>ideas rejected out-of-sample</span></div>
+<div><b>12</b><span>cost &amp; latency stress conditions</span></div>
+<div><b>9</b><span>strategies in the live portfolio</span></div>
+</div>
+
+<section id="quadbreak">
+<h2>QuadBreak</h2>
+<p class="sub">My main project: a multi-strategy algorithmic trading system for gold (XAUUSD).</p>
+
+<div class="card feature">
+<div class="tag">Python · MQL5 · MetaTrader 5 · 2026</div>
+<h3>A portfolio of independent strategies, sized by volatility</h3>
+<p>QuadBreak is written in MQL5 and trades XAUUSD. It runs nine independent strategies as one portfolio, with position sizing that scales down when recent portfolio volatility rises. Every strategy and every rule in it was researched on a tick-level backtesting engine I built in Python, and had to pass the same out-of-sample tests before it went in. It is now forward-testing on a live account.</p>
+<p style="margin-bottom:0">Specific strategies and parameters are kept private. This page shows how the system was built and validated, and what it achieved.</p>
+
+<div class="tablewrap"><table class="results" aria-label="QuadBreak v1.60 simulated results">
+<thead><tr><th>Period</th><th>Role</th><th>Avg. monthly growth*</th><th>Max drawdown</th></tr></thead>
+<tbody>
+<tr class="oos"><td>2025</td><td>Test</td><td class="num">42.6%</td><td class="num">~41%</td></tr>
+<tr><td>Jan – Jun 2026</td><td>Training</td><td class="num">47.4%</td><td class="num">~41%</td></tr>
+<tr class="oos"><td>Jul – Nov 2026</td><td>Test</td><td class="num">40.3%</td><td class="num">~41%</td></tr>
+</tbody>
+</table></div>
+<p class="note">*Version 1.60, simulated on tick data from a $1,000 start, measured in the <b>worst</b> of four cost and latency conditions for each period. Settings were chosen on the training period only. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+</div>
+</section>
+
+<section id="process">
+<h2>How every idea is tested</h2>
+<p class="sub">The same pipeline for every idea, with pass/fail rules written down before the test data is looked at. Most ideas don't survive it.</p>
+<div class="pipeline">
+<div class="card"><h4>Pre-register</h4><p>Write the hypothesis, what will change, and the pass/fail rules before testing.</p></div>
+<div class="card"><h4>Fit on training data only</h4><p>Choose settings on Jan–Jun 2026. The test periods stay untouched.</p></div>
+<div class="card"><h4>12-condition stress battery</h4><p>Three periods × four conditions: fixed and raw spreads, and 1- and 5-minute execution delays.</p></div>
+<div class="card"><h4>Out-of-sample check</h4><p>Must hold up on 2025 and Jul–Nov 2026, the two periods it never saw.</p></div>
+<div class="card"><h4>Lookahead &amp; twin tests</h4><p>Check that no future data leaks in, and that results beat randomized "twin" versions of the same idea.</p></div>
+<div class="card"><h4>Independent re-implementation</h4><p>Code it a second time, separately, and confirm both produce the same signals.</p></div>
+<div class="card"><h4>Portfolio test</h4><p>Add it to the live portfolio and compare at matched drawdown. It must improve the whole, not just itself.</p></div>
+<div class="card"><h4>MQL5, tester, live</h4><p>Implement in the EA, verify in the MT5 tester, then forward-test on a live account.</p></div>
+</div>
+</section>
+
+<section>
+<h2>What the research looks like</h2>
+<p class="sub">A week of research logged in the experiment register, Nov 11–17, 2026.</p>
+<div class="funnel">
+<div class="card"><b>96</b><span>experiments, each with a written hypothesis, baseline and decision</span></div>
+<div class="card"><b>61</b><span>failed their pre-set rules and were dropped, including portfolio reweighting schemes (HERC, NCO, inverse volatility) that couldn't beat equal weighting at matched drawdown</span></div>
+<div class="card"><b>13</b><span>passed every gate and were adopted into QuadBreak</span></div>
+</div>
+</section>
+
+<section>
+<h2>Agentic AI research workflow</h2>
+<p class="sub">How I run research at this pace.</p>
+<div class="two">
+<div class="card box"><h3>LLM coding agents do the legwork</h3>
+<p>I direct LLM coding agents to implement each hypothesis in the research engine, run the full test battery, write the reports and update the experiment log. The pass/fail rules are fixed in the pre-registration, so the agents can't move the goalposts after seeing results.</p>
+<p style="margin:0">That is how 96 fully documented experiments fit into a single week.</p></div>
+<div class="card box"><h3>The research stack</h3>
+<p><b>Data:</b> 151M+ XAUUSD ticks (Dukascopy), Jan 2025 – Nov 2026, converted to a fast NumPy tick store and 1-minute bars.</p>
+<p><b>Engine:</b> a Python tick-level simulator with stops, targets, trailing exits, breakeven, pyramiding and session rules. The research codebase is 219 scripts, about 10,000 lines.</p>
+<p style="margin:0"><b>Execution:</b> MQL5 expert advisors in MetaTrader 5, running on a Windows VPS across multiple accounts.</p></div>
+</div>
+</section>
+
+<section>
+<h2>Version history</h2>
+<p class="sub">Each version shipped only after passing the pipeline above.</p>
+<div class="timeline2">
+<div class="v"><b>v1.00</b><span>First multi-strategy portfolio, built from fixed reward-to-risk research</span></div>
+<div class="v"><b>v1.20</b><span>Improved exits</span></div>
+<div class="v"><b>v1.30</b><span>Portfolio volatility targeting</span></div>
+<div class="v"><b>v1.40</b><span>Two new strategies, 7 in total</span></div>
+<div class="v"><b>v1.50</b><span>All 9 strategies combined at equal risk</span></div>
+<div class="v now"><b>v1.60</b><span>Volatility targeting across all 9 strategies. Now forward-testing on a live account</span></div>
+</div>
+</section>
+
+<section id="experience">
+<h2>Experience</h2>
+<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=1" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
+<div class="timeline">
+<div class="job"><div class="when">10/2025 – present</div><div>
+<h3>Data Analyst</h3><div class="org">Meta (via Tundra Technical Solutions) · Vancouver, BC</div>
+<ul><li>Develop and evaluate ML/LLM-powered analytics models through prompt refinement, benchmarking and performance validation.</li>
+<li>Improve an LLM chatbot for Business and Sales teams through structured evaluation and edge-case analysis.</li></ul></div></div>
+<div class="job"><div class="when">09/2024 – 03/2025</div><div>
+<h3>Data Scientist</h3><div class="org">Eon Labs Ltd. · Vancouver, BC</div>
+<ul><li>Built time-series and ML forecasting models (Random Forest, XGBoost, LightGBM, CatBoost) for highly non-stationary demand and price signals, for a <b>2.66× improvement in risk-reward performance</b>.</li>
+<li>Applied regime detection and drift detection to keep models performing as conditions changed.</li>
+<li>Built automated research, backtesting and evaluation pipelines in Python.</li></ul></div></div>
+<div class="job"><div class="when">11/2023 – 10/2024</div><div>
+<h3>Data Analyst</h3><div class="org">TELUS Digital Inc. · Vancouver, BC</div>
+<ul><li>Evaluated and helped optimize large-scale LLM-based search systems.</li></ul></div></div>
+<div class="job"><div class="when">01/2014 – 06/2022</div><div>
+<h3>Senior Data Scientist / Assistant Manager – Data Science</h3><div class="org">SCG Chemicals Co., Ltd · Bangkok, Thailand</div>
+<ul><li>Price and demand forecasting on non-stationary commodity indices: <b>$1.75M/yr</b> in savings.</li>
+<li>Supply-chain optimization (MINLP with Gurobi): <b>$3M/yr</b> in cost reductions.</li>
+<li>Hierarchical forecasting on automated Azure pipelines: 88% accuracy, <b>$600K/yr</b> saved.</li>
+<li>Led data science teams and end-to-end ML projects.</li></ul></div></div>
+</div>
+</section>
+
+<section id="skills">
+<h2>Skills</h2>
+<p class="sub">What I bring to a quant research team.</p>
+<div class="skills">
+<div class="card"><h3>Quant research &amp; trading</h3><div class="chips"><span>Tick-level backtesting</span><span>Out-of-sample validation</span><span>Walk-forward testing</span><span>Cost &amp; latency stress tests</span><span>Lookahead-bias checks</span><span>Portfolio construction</span><span>Volatility targeting</span><span>Risk management</span><span>MQL5 / MetaTrader 5</span></div></div>
+<div class="card"><h3>Agentic AI &amp; automation</h3><div class="chips"><span>LLM coding agents</span><span>Agentic research workflows</span><span>LLM evaluation &amp; benchmarking</span><span>Automated experiment pipelines</span><span>Automated reporting</span></div></div>
+<div class="card"><h3>Time-series &amp; ML</h3><div class="chips"><span>Prophet</span><span>XGBoost</span><span>LightGBM</span><span>CatBoost</span><span>LSTM / GRU</span><span>N-HiTS / N-BEATS</span><span>TimesFM</span><span>Regime &amp; drift detection</span><span>Anomaly detection</span></div></div>
+<div class="card"><h3>Statistics &amp; optimization</h3><div class="chips"><span>Statistical modeling</span><span>Hypothesis testing</span><span>Bayesian statistics</span><span>Causal inference</span><span>MINLP (Gurobi)</span><span>Simulation</span></div></div>
+<div class="card"><h3>Programming &amp; systems</h3><div class="chips"><span>Python</span><span>NumPy</span><span>pandas</span><span>scikit-learn</span><span>PyTorch</span><span>C/C++</span><span>MQL5</span><span>R</span><span>SQL</span><span>MATLAB</span><span>Git</span><span>APIs</span><span>Docker</span></div></div>
+<div class="card"><h3>Cloud &amp; MLOps</h3><div class="chips"><span>AWS</span><span>Azure</span><span>GCP</span><span>MLflow</span><span>TFX</span><span>PySpark</span></div></div>
+</div>
+</section>
+
+<section id="education" class="two">
+<div class="card box"><h3>Education</h3>
+<p><b>Master of Data Science</b><br>University of British Columbia · 2022–2023<br><span class="small">GPA 4.00 · 95 selected from 2,000+ applicants</span></p>
+<p><b>MSc, Electrical Engineering (Systems &amp; Modeling)</b><br>University of Southern California · 2012–2013</p>
+<p style="margin:0"><b>Bachelor of Instrumentation Engineering</b><br>KMITL, Bangkok · 2002–2006</p></div>
+<div class="card box"><h3>Certifications</h3>
+<p><b>Guided Tour of Machine Learning in Finance</b><br><span class="small">New York University</span></p>
+<p><b>Machine Learning Engineering for Production (MLOps) Specialization</b><br><span class="small">DeepLearning.AI · 4 courses</span></p>
+<p style="margin:0"><b>Machine Learning Operations (MLOps): Getting Started</b><br><span class="small">Google Cloud</span></p></div>
+</section>
+
+<section id="contact">
+<div class="card contact">
+<div><h2>Let's talk</h2><p>Open to quantitative research and algorithmic trading roles.</p></div>
+<div class="btns"><a class="btn primary" href="mailto:nate.puangpanbut@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a></div>
+</div>
+</section>
+</main>
+
+<footer class="site"><div class="wrap">
+<div>© <span id="yr"></span> Nate Puangpanbut</div>
+<div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
+</div></footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>
