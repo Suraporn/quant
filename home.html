@@ -16,7 +16,7 @@
 <body>
 <header class="site"><div class="wrap">
 <a class="brand" href="#top">Nate Puangpanbut</a>
-<nav><a href="#quadbreak">QuadBreak</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+<nav><a href="#quadbreak">QuadBreak</a><a href="#projects">Projects</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
 </div></header>
 
 <main class="wrap" id="top">
@@ -62,6 +62,70 @@
 </tbody>
 </table></div>
 <p class="note">*Version 1.60, simulated on tick data from a $1,000 start, measured in the <b>worst</b> of four cost and latency conditions for each period. Settings were chosen on the training period only. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+</div>
+</section>
+
+<section id="projects">
+<h2>Projects</h2>
+<p class="sub">Research beyond QuadBreak, plus quant-relevant work from my roles and studies.</p>
+<div class="groups">
+<h3 class="group">Trading research</h3>
+<div class="cases">
+<div class="card case"><div class="tag">Strategy research</div>
+<h3>Auditing 19 popular trading methods</h3>
+<p>I put 19 widely shared methods through the same pre-registered battery as my own ideas. They included ICT and fair-value-gap setups, supply-and-demand zones, market structure, Turtle rules, Heikin Ashi, volume profile and several paid-indicator proxies.</p>
+<div class="result"><b>14 failed</b> and 3 weren't adopted. Only <b>2 contributed</b> anything to QuadBreak</div></div>
+<div class="card case"><div class="tag">Regime detection</div>
+<h3>Testing whether regimes can be traded</h3>
+<p>I tested four ways to detect market regimes: a Gaussian hidden Markov model, Bayesian online change-point detection, trend/range votes (ADX, efficiency ratio, choppiness) and tick-volume confirmation.</p>
+<div class="result"><b>None passed</b> their pre-set gates, so QuadBreak stays regime-agnostic instead of fitting a filter to noise</div></div>
+<div class="card case"><div class="tag">Portfolio construction</div>
+<h3>Weighting a multi-strategy portfolio</h3>
+<p>I compared HERC, NCO, inverse-volatility, momentum, Sharpe and performance-based weights, plus pause rules, against equal weighting, all at matched drawdown.</p>
+<div class="result">No reweighting beat <b>equal weight</b>. Portfolio <b>volatility targeting</b> did, and was adopted in v1.30</div></div>
+<div class="card case"><div class="tag">Risk &amp; capital</div>
+<h3>Profit-withdrawal policy simulation</h3>
+<p>I simulated four monthly withdrawal policies across 23 months of tick data, to plan how much profit to take out of a live account instead of compounding indefinitely.</p>
+<div class="result">A tested basis for the <b>live withdrawal plan</b>, balancing cash taken against account growth</div></div>
+<div class="card case"><div class="tag">MQL5 · Live trading</div>
+<h3>Other expert advisors in production</h3>
+<p>I've built and run other MQL5 expert advisors for gold, including GridFollowHedge and WealthTrade. They have on-chart control panels, equity kill switches, spread protection and trading-window rules.</p>
+<div class="result">Running across <b>multiple MT5 accounts</b> on a Windows VPS</div></div>
+</div>
+<h3 class="group">Industry quant work</h3>
+<div class="cases">
+<div class="card case"><div class="tag">Forecasting · Eon Labs</div>
+<h3>Forecasting non-stationary signals</h3>
+<p>I built time-series and ML forecasting models (Random Forest, XGBoost, LightGBM, CatBoost) for highly non-stationary demand and price signals, with regime detection and drift detection to keep them reliable.</p>
+<div class="result"><b>2.66×</b> improvement in risk-reward performance</div></div>
+<div class="card case"><div class="tag">Backtesting · Eon Labs</div>
+<h3>Automated research &amp; backtesting pipelines</h3>
+<p>I built automated research, backtesting and evaluation pipelines in Python to measure forecast accuracy, scenario outcomes and downstream decision impact.</p>
+<div class="result"><b>Automated</b> evaluation of accuracy, scenarios and decision impact</div></div>
+<div class="card case"><div class="tag">Commodities · SCG</div>
+<h3>Commodity price forecasting</h3>
+<p>I forecast olefins raw-material and product prices such as Brent crude, naphtha, propane and benzene up to 3 months ahead, using time-series and ML models with LIME to explain each prediction.</p>
+<div class="result"><b>$1.75M/yr</b> in savings</div></div>
+<div class="card case"><div class="tag">Optimization · SCG</div>
+<h3>Supply-chain optimization</h3>
+<p>I designed and solved supply-chain optimization models as mixed-integer nonlinear programs (MINLP) in Gurobi.</p>
+<div class="result"><b>$3M/yr</b> in cost reductions</div></div>
+<div class="card case"><div class="tag">LLMs · Meta, TELUS</div>
+<h3>LLM evaluation and benchmarking</h3>
+<p>I evaluate and improve ML/LLM-powered analytics models and a business chatbot at Meta (via Tundra), and I evaluated LLM-based search systems at TELUS, through benchmarking and edge-case analysis.</p>
+<div class="result">The evaluation skills behind my <b>agentic AI research workflow</b></div></div>
+</div>
+<h3 class="group">Academic</h3>
+<div class="cases">
+<div class="card case"><div class="tag">Bayesian statistics</div>
+<h3>EPL Ranking with Bayesian Inference</h3>
+<p>I rated Premier League teams' skills and forecast the final table with a Bayesian model. <a href="https://suraporn.github.io/ds/post/epl-ranking-with-bayesian-inference.html" target="_blank" rel="noopener">Read the write-up ↗</a></p>
+<div class="result">Bayesian ranking of <b>team skill</b></div></div>
+<div class="card case"><div class="tag">Capstone · UBC MDS</div>
+<h3>The Price is Right</h3>
+<p>A full-time capstone with Olyns (Santa Clara, USA). I analyzed how recycling users behave, built demand-forecasting models and designed a surge-pricing algorithm.</p>
+<div class="result">Demand forecasts and a <b>surge-pricing algorithm</b> for a real client</div></div>
+</div>
 </div>
 </section>
 
