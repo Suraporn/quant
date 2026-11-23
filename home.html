@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -65,10 +65,6 @@
 <div class="mod"><div class="ic">◉</div><b>Monitoring</b><span>On-chart panel · kill switch · spread guard</span></div>
 </div>
 
-<div class="profile-row">
-<div class="profile" role="group" aria-label="Risk profile"><span class="pl">Risk profile</span><button data-p="low" aria-pressed="false">Low <small>~10% DD</small></button><button data-p="medium" aria-pressed="false">Medium <small>~20% DD</small></button><button data-p="high" class="on" aria-pressed="true">High <small>live · ~50% DD</small></button></div>
-<p id="profile-note" class="profile-note">High is QuadBreak's live setting: 2.2% risk per strategy.</p>
-</div>
 <div class="qb-kpis">
 <div><span>Avg. monthly growth</span><b data-kpi="avg_month">40.6%</b></div>
 <div><span>Max drawdown</span><b data-kpi="mdd">49.2%</b></div>
@@ -109,12 +105,21 @@
 </div>
 
 <div class="qb-card">
-<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition · selected risk profile</span></div>
+<div class="qb-card-head"><b>Risk profiles compared</b><span class="muted">same signals and trades, different position size · Jan 2025 – Nov 2026</span></div>
+<div class="tablewrap"><table class="qb-table profiles" aria-label="QuadBreak risk profiles compared">
+<thead><tr><th>Profile</th><th>Risk per strategy</th><th>Avg. monthly growth</th><th>Max drawdown</th><th>Worst-case drawdown</th><th>Sharpe</th><th>Calmar</th><th>$1,000 grows to</th></tr></thead>
+<tbody id="profiles"></tbody>
+</table></div>
+<p class="muted" style="margin:10px 0 2px;font-size:12.5px">Everything else on this panel shows High, QuadBreak's live setting. Low and Medium are scaled in hindsight so the full-period max drawdown lands near 10% and 20%. Worst-case drawdown is the highest of the four cost conditions.</p>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition · live 2.2% setting</span></div>
 <div id="heatmap" class="heat" aria-label="Monthly returns heatmap"></div>
 </div>
 
 <div class="qb-card cal-card">
-<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">raw-spread condition · selected risk profile</span></div>
+<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">raw-spread condition · live 2.2% setting</span></div>
 <div id="calendar" class="cal"></div>
 <div class="chart-tip cal-tip" hidden></div>
 </div>
@@ -315,6 +320,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=6"></script>
+<script src="charts.js?v=7"></script>
 </body>
 </html>

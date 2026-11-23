@@ -1,4 +1,4 @@
-// QuadBreak dashboard: risk-profile switch, equity/drawdown, monthly heatmap, daily P&L calendar,
+// QuadBreak dashboard (live High setting) + risk-profile comparison, equity/drawdown, monthly heatmap, daily P&L calendar,
 // per-strategy table. Plain SVG/HTML, no libraries. Data: versions.json.
 (function () {
   const NS = "http://www.w3.org/2000/svg";
@@ -212,23 +212,18 @@
       const g = document.querySelector(`[data-pg="${p.w}"]`), m = document.querySelector(`[data-pm="${p.w}"]`);
       if (g) g.textContent = `${p.growth.toFixed(1)}%`; if (m) m.textContent = `${p.mdd.toFixed(1)}%`;
     });
-    const note = $("#profile-note");
-    if (note) note.textContent = current === "high"
-      ? "High is QuadBreak's live setting: 2.2% risk per strategy."
-      : `${current === "medium" ? "Medium" : "Low"} uses ${(+V.risk_per_strategy.toFixed(2))}% risk per strategy, scaled so the full-period max drawdown is about ${current === "medium" ? "20" : "10"}% in the raw-spread condition. Same signals, smaller positions.`;
+    const tb = $("#profiles");
+    if (tb) tb.innerHTML = [["high", "High <em>live</em>"], ["medium", "Medium"], ["low", "Low"]].map(([p, lab]) => {
+      const P = DATA.versions[p], k = P.kpi;
+      const money = k.final >= 1e6 ? `$${(k.final / 1e6).toFixed(2)}M` : `$${Math.round(k.final).toLocaleString("en-US")}`;
+      return `<tr${p === "high" ? ' class="on"' : ""}><td>${lab}</td><td>${(+P.risk_per_strategy.toFixed(2))}%</td><td class="up">${k.avg_month.toFixed(1)}%</td><td class="dn">${k.mdd.toFixed(1)}%</td><td class="dn">${k.worst_cond_mdd.toFixed(1)}%</td><td>${k.sharpe.toFixed(2)}</td><td>${k.calmar >= 100 ? k.calmar.toFixed(0) : k.calmar.toFixed(1)}</td><td>${money}</td></tr>`;
+    }).join("");
     equity($("#chart-equity"), B, V);
     drawdown($("#chart-dd"), B, V);
     heatmap($("#heatmap"), B, V);
     calendar($("#calendar"), V);
   }
-  function wire() {
-    document.querySelectorAll(".profile button").forEach((b) => b.addEventListener("click", () => {
-      current = b.dataset.p;
-      document.querySelectorAll(".profile button").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
-      render();
-    }));
-  }
   fetch("versions.json?v=2").then((r) => r.json()).then((D) => {
-    DATA = D; wire(); render(); strategies($("#strategies"), D.strategies);
+    DATA = D; render(); strategies($("#strategies"), D.strategies);
   }).catch((err) => { console.error(err); document.querySelectorAll(".chart-host,#heatmap,#calendar,#strategies").forEach((h) => { h.textContent = "Data couldn't load."; }); });
 })();
