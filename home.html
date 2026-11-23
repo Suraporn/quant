@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -82,29 +82,23 @@
 </div>
 
 <div class="qb-card">
-<div class="qb-card-head">
-<div class="tabs" role="tablist"><button class="tab on" data-view="equity" role="tab" aria-selected="true">Equity</button><button class="tab" data-view="dd" role="tab" aria-selected="false">Drawdown</button></div>
+<div class="qb-card-head"><b>Equity <span class="muted">growth of $1,000, log scale</span></b>
 <div class="legend chart-legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
 </div>
 <div class="chart-host" id="chart-equity" aria-label="Growth of $1,000, log scale"></div>
-<div class="chart-host" id="chart-dd" aria-label="Drawdown chart" hidden></div>
+<div class="qb-card-head sub-head"><b>Drawdown <span class="muted">worst intraday drop from the running peak</span></b></div>
+<div class="chart-host" id="chart-dd" aria-label="Drawdown chart"></div>
 </div>
 
-<div class="qb-grid2">
 <div class="qb-card">
-<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition</span></div>
-<div id="heatmap" class="heat" aria-label="Monthly returns heatmap"></div>
-</div>
-<div class="qb-card">
-<div class="qb-card-head"><b>By period</b><span class="muted">fresh $1,000 start · worst condition</span></div>
-<table class="qb-table" aria-label="QuadBreak v1.60 results by period">
-<thead><tr><th>Period</th><th>Monthly</th><th>Max DD</th></tr></thead>
+<div class="qb-card-head"><b>Return by period</b><span class="muted">fresh $1,000 start · worst of the four conditions</span></div>
+<div class="tablewrap"><table class="qb-table periods" aria-label="QuadBreak v1.60 results by period">
+<thead><tr><th></th><th>2025 <em>out-of-sample</em></th><th>Jan–Jun 2026 <em class="train">training</em></th><th>Jul–Nov 2026 <em>out-of-sample</em></th></tr></thead>
 <tbody>
-<tr data-period="2025"><td>2025 <em>out-of-sample</em></td><td class="g"></td><td class="m"></td></tr>
-<tr data-period="Train"><td>Jan–Jun 2026 <em class="train">training</em></td><td class="g"></td><td class="m"></td></tr>
-<tr data-period="JulNov"><td>Jul–Nov 2026 <em>out-of-sample</em></td><td class="g"></td><td class="m"></td></tr>
+<tr><td>Avg. monthly growth</td><td data-pg="2025"></td><td data-pg="Train"></td><td data-pg="JulNov"></td></tr>
+<tr><td>Max drawdown</td><td data-pm="2025"></td><td data-pm="Train"></td><td data-pm="JulNov"></td></tr>
 </tbody>
-</table>
+</table></div>
 <div class="qb-checks">
 <div>✓ 12-condition cost &amp; latency battery</div>
 <div>✓ Lookahead &amp; random-twin tests</div>
@@ -112,6 +106,10 @@
 <div>✓ Settings chosen on training data only</div>
 </div>
 </div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition · selected risk profile</span></div>
+<div id="heatmap" class="heat" aria-label="Monthly returns heatmap"></div>
 </div>
 
 <div class="qb-card cal-card">
@@ -316,6 +314,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=4"></script>
+<script src="charts.js?v=5"></script>
 </body>
 </html>

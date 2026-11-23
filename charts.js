@@ -113,6 +113,14 @@
     t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
     return t < 0.5 ? `rgb(${L(92, 242)},${L(69, 193)},${L(18, 78)})` : `rgb(${L(242, 255)},${L(193, 231)},${L(78, 163)})`;
   }
+  function green(t) {
+    t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
+    return `rgb(${L(20, 74)},${L(60, 222)},${L(36, 128)})`;
+  }
+  function red(t) {
+    t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
+    return `rgb(${L(80, 248)},${L(24, 113)},${L(28, 113)})`;
+  }
   function blue(t) {
     t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
     return `rgb(${L(44, 124)},${L(58, 156)},${L(110, 255)})`;
@@ -130,12 +138,12 @@
         if (v === undefined) { h += '<td class="empty"></td>'; continue; }
         const partial = k === B.months[B.months.length - 1] ? " (to Nov 12)" : "";
         const t = v / vmax;
-        h += v < 0 ? `<td class="neg" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}</td>`
-                   : `<td style="background:${gold(t)};color:${Math.sqrt(t) < 0.42 ? "#f6e7c1" : "#1a1205"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}</td>`;
+        h += v < 0 ? `<td class="neg" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}%</td>`
+                   : `<td style="background:${gold(t)};color:${Math.sqrt(t) < 0.42 ? "#f6e7c1" : "#1a1205"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}%</td>`;
       }
       h += "</tr>";
     });
-    host.innerHTML = h + `</tbody></table><div class="scale"><span>0%</span><i></i><span>+${Math.round(vmax)}%</span><span style="margin-left:10px">values in %</span></div>`;
+    host.innerHTML = h + `</tbody></table><div class="scale"><span>0%</span><i></i><span>+${Math.round(vmax)}%</span></div>`;
   }
 
   // GitHub-style calendar of daily P&L (weekdays), one block per year
@@ -156,7 +164,7 @@
         const key = d.toISOString().slice(0, 10), v = V.daily[key];
         let style = "", cls = "c";
         if (v === undefined || Math.abs(v) < 1e-9) cls += " z";
-        else { style = `background:${v > 0 ? gold(v / cap) : blue(-v / cap)}`; v > 0 ? gains++ : losses++; }
+        else { style = `background:${v > 0 ? green(v / cap) : red(-v / cap)}`; v > 0 ? gains++ : losses++; }
         cells += `<i class="${cls}" style="grid-column:${idx + 1};grid-row:${dow + 1};${style}" data-d="${key}" data-v="${v === undefined ? "" : v}"></i>`;
       }
       html += `<div class="cal-year"><div class="cal-y">${y}<span>${gains} up · ${losses} down days</span></div><div class="cal-m">${months}</div><div class="cal-g">${cells}</div></div>`;
@@ -199,9 +207,9 @@
     set("sortino", K.sortino.toFixed(1)); set("calmar", K.calmar >= 100 ? K.calmar.toFixed(0) : K.calmar.toFixed(1)); set("pf", K.pf.toFixed(2));
     set("win", `${K.win.toFixed(0)}%`); set("trades", K.trades.toLocaleString("en-US")); set("pos_months", `${K.pos_months}/${K.n_months}`);
     set("risk", `${(+V.risk_per_strategy.toFixed(2))}% per strategy · volatility targeting`);
-    document.querySelectorAll("[data-period]").forEach((tr) => {
-      const p = V.periods.find((x) => x.w === tr.dataset.period);
-      tr.querySelector(".g").textContent = `${p.growth.toFixed(1)}%`; tr.querySelector(".m").textContent = `${p.mdd.toFixed(1)}%`;
+    V.periods.forEach((p) => {
+      const g = document.querySelector(`[data-pg="${p.w}"]`), m = document.querySelector(`[data-pm="${p.w}"]`);
+      if (g) g.textContent = `${p.growth.toFixed(1)}%`; if (m) m.textContent = `${p.mdd.toFixed(1)}%`;
     });
     const note = $("#profile-note");
     if (note) note.textContent = current === "high"
@@ -213,12 +221,6 @@
     calendar($("#calendar"), V);
   }
   function wire() {
-    document.querySelectorAll(".qb .tab").forEach((t) => t.addEventListener("click", () => {
-      document.querySelectorAll(".qb .tab").forEach((x) => { x.classList.toggle("on", x === t); x.setAttribute("aria-selected", x === t); });
-      const eq = t.dataset.view === "equity";
-      $("#chart-equity").hidden = !eq; $("#chart-dd").hidden = eq;
-      $(".qb .chart-legend").style.visibility = eq ? "visible" : "hidden";
-    }));
     document.querySelectorAll(".profile button").forEach((b) => b.addEventListener("click", () => {
       current = b.dataset.p;
       document.querySelectorAll(".profile button").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
