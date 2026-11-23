@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -45,47 +45,72 @@
 
 <section id="quadbreak">
 <h2>QuadBreak</h2>
-<p class="sub">My main project: a multi-strategy algorithmic trading system for gold (XAUUSD).</p>
+<p class="sub">My main project: a systematic multi-strategy trading system for gold (XAUUSD).</p>
 
-<div class="card feature">
-<div class="tag">Python · MQL5 · MetaTrader 5 · 2026</div>
-<h3>A portfolio of independent strategies, sized by volatility</h3>
-<p>QuadBreak is written in MQL5 and trades XAUUSD. It runs nine independent strategies as one portfolio, with position sizing that scales down when recent portfolio volatility rises. Every strategy and every rule in it was researched on a tick-level backtesting engine I built in Python, and had to pass the same out-of-sample tests before it went in. It is now forward-testing on a live account.</p>
-<p style="margin-bottom:0">Specific strategies and parameters are kept private. This page shows how the system was built and validated, and what it achieved.</p>
-
-<div class="kpis">
-<div><b>40.6%</b><span>Avg. monthly growth</span></div>
-<div><b>49.2%</b><span>Max drawdown</span></div>
-<div><b>3.08</b><span>Sharpe ratio</span></div>
-<div><b>10.3</b><span>Sortino ratio</span></div>
-<div><b>119</b><span>Calmar ratio</span></div>
-<div><b>1.39</b><span>Profit factor</span></div>
-<div><b>46%</b><span>Win rate</span></div>
-<div><b>1,678</b><span>Trades</span></div>
-<div><b>22 / 23</b><span>Profitable months</span></div>
+<div class="qb">
+<div class="qb-head">
+<div class="qb-brand"><div class="qb-logo">QB</div><div><div class="qb-name">QuadBreak <span>v1.60</span></div><div class="qb-tag">Systematic multi-strategy trading · XAUUSD</div></div></div>
+<div class="qb-pills"><span class="pill live"><i></i>Live forward test</span><span class="pill">9 strategies</span><span class="pill">MQL5 · MetaTrader 5</span><span class="pill">Python research engine</span></div>
 </div>
-<p class="note" style="margin-top:10px">Version 1.60 at its live setting (2.2% risk per strategy, volatility-targeted), simulated on tick data from Jan 2025 to Nov 12, 2026, starting from $1,000. Every stat uses the <b>raw-spread condition</b>, the weakest of the four tested. Sharpe and Sortino are annualized from daily returns. Calmar is the annualized compound return divided by max drawdown, and it's very large because gains compound monthly.</p>
 
-<h4 class="chart-title">Growth of $1,000 <span>log scale · four cost &amp; latency conditions</span></h4>
-<div class="legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Fixed 25-pt spread, +1 min and +5 min delays</div>
-<div class="chart-host" id="chart-equity" aria-label="Equity curve chart"></div>
+<p class="qb-intro">Nine independent strategies run as one portfolio, with position sizing that scales down when recent portfolio volatility rises. Every strategy and rule was researched on a tick-level engine I built in Python, and had to pass the same out-of-sample tests before it went in. Strategy logic and parameters are kept private.</p>
 
-<h4 class="chart-title">Drawdown <span>raw-spread condition</span></h4>
-<div class="chart-host" id="chart-dd" aria-label="Drawdown chart"></div>
+<div class="qb-arch">
+<div class="mod"><div class="ic">◈</div><b>Signal layer</b><span>9 independent strategies</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">◐</div><b>Risk engine</b><span>2.2% per strategy · volatility targeting</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">▲</div><b>Execution</b><span>MQL5 expert advisor · MT5</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">◉</div><b>Monitoring</b><span>On-chart panel · kill switch · spread guard</span></div>
+</div>
 
-<h4 class="chart-title">Monthly returns <span>raw-spread condition</span></h4>
-<div class="chart-host" id="chart-monthly" aria-label="Monthly returns chart"></div>
+<div class="qb-kpis">
+<div><span>Avg. monthly growth</span><b>40.6%</b></div>
+<div><span>Max drawdown</span><b>49.2%</b></div>
+<div><span>Sharpe</span><b>3.08</b></div>
+<div><span>Sortino</span><b>10.3</b></div>
+<div><span>Calmar</span><b>119</b></div>
+<div><span>Profit factor</span><b>1.39</b></div>
+<div><span>Win rate</span><b>46%</b></div>
+<div><span>Trades</span><b>1,678</b></div>
+<div><span>Profitable months</span><b>22/23</b></div>
+</div>
 
-<h4 class="chart-title">By period <span>each period starts fresh at $1,000; worst of the four conditions</span></h4>
-<div class="tablewrap"><table class="results" aria-label="QuadBreak v1.60 results by period">
-<thead><tr><th>Period</th><th>Role</th><th>Avg. monthly growth</th><th>Max drawdown</th></tr></thead>
+<div class="qb-card">
+<div class="qb-card-head">
+<div class="tabs" role="tablist"><button class="tab on" data-view="equity" role="tab" aria-selected="true">Equity</button><button class="tab" data-view="dd" role="tab" aria-selected="false">Drawdown</button></div>
+<div class="legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
+</div>
+<div class="chart-host" id="chart-equity" aria-label="Growth of $1,000, log scale"></div>
+<div class="chart-host" id="chart-dd" aria-label="Drawdown chart" hidden></div>
+</div>
+
+<div class="qb-grid2">
+<div class="qb-card">
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition</span></div>
+<div id="heatmap" class="heat" aria-label="Monthly returns heatmap"></div>
+</div>
+<div class="qb-card">
+<div class="qb-card-head"><b>By period</b><span class="muted">fresh $1,000 start · worst condition</span></div>
+<table class="qb-table" aria-label="QuadBreak v1.60 results by period">
+<thead><tr><th>Period</th><th>Monthly</th><th>Max DD</th></tr></thead>
 <tbody>
-<tr class="oos"><td>2025</td><td>Test</td><td class="num">37.0%</td><td class="num">51.7%</td></tr>
-<tr><td>Jan – Jun 2026</td><td>Training</td><td class="num">47.4%</td><td class="num">41.3%</td></tr>
-<tr class="oos"><td>Jul – Nov 12, 2026</td><td>Test</td><td class="num">36.8%</td><td class="num">39.7%</td></tr>
+<tr><td>2025 <em>out-of-sample</em></td><td>37.0%</td><td>51.7%</td></tr>
+<tr><td>Jan–Jun 2026 <em class="train">training</em></td><td>47.4%</td><td>41.3%</td></tr>
+<tr><td>Jul–Nov 2026 <em>out-of-sample</em></td><td>36.8%</td><td>39.7%</td></tr>
 </tbody>
-</table></div>
-<p class="note">Settings were chosen on the training period only. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+</table>
+<div class="qb-checks">
+<div>✓ 12-condition cost &amp; latency battery</div>
+<div>✓ Lookahead &amp; random-twin tests</div>
+<div>✓ Independent re-implementation</div>
+<div>✓ Settings chosen on training data only</div>
+</div>
+</div>
+</div>
+
+<p class="qb-foot">v1.60 at its live setting, simulated on 151M+ ticks from Jan 2025 to Nov 12, 2026, starting from $1,000. Stats use the raw-spread condition, the weakest of four tested. Sharpe and Sortino are annualized from daily returns. Calmar is the annualized compound return divided by max drawdown, and it's large because gains compound monthly. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
 </div>
 </section>
 
@@ -275,6 +300,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=2"></script>
+<script src="charts.js?v=3"></script>
 </body>
 </html>
