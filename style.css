@@ -238,8 +238,8 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 .heat td{height:34px;border-radius:6px;text-align:center;color:#1a1205;font-variant-numeric:tabular-nums;cursor:default}
 .heat td.empty{background:rgba(255,255,255,.03)}
 .heat td.neg{background:#334155;color:#e6eaf2}
-.heat .scale{display:flex;align-items:center;gap:8px;color:var(--qmuted);font:500 11px var(--mono);margin:8px 0 4px}
-.heat .scale i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#5c4512,#f2c14e,#ffe7a3)}
+.heat .scale,.cal .scale{display:flex;align-items:center;gap:8px;color:var(--qmuted);font:500 11px var(--mono);margin:8px 0 4px}
+.heat .scale i,.cal .scale i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#5c4512,#f2c14e,#ffe7a3)}
 .qb-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:2px}
 .qb-table th{color:var(--qmuted);font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.04em;text-align:left;padding:8px 6px;border-bottom:1px solid var(--qline)}
 .qb-table td{padding:10px 6px;border-bottom:1px solid var(--qline);font-variant-numeric:tabular-nums}
@@ -253,3 +253,41 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 .qb-grid2>*{min-width:0}
 .heat{overflow-x:auto}
 @media (max-width:760px){.heat table{border-spacing:2px;font-size:9.5px}.heat td{height:26px;font-size:9.5px}.heat th{font-size:9.5px}.qb-kpis b{font-size:18px}}
+
+/* risk profile switch */
+.profile-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 12px}
+.profile{display:inline-flex;align-items:center;background:#0b1220;border:1px solid var(--qline);border-radius:12px;padding:4px;gap:2px}
+.profile .pl{font:500 11px var(--mono);color:var(--qmuted);text-transform:uppercase;letter-spacing:.05em;padding:0 10px}
+.profile button{background:none;border:0;color:var(--qmuted);font:600 13.5px var(--sans);padding:8px 14px;border-radius:9px;cursor:pointer}
+.profile button small{display:block;font:500 10.5px var(--mono);opacity:.8;margin-top:1px}
+.profile button.on{background:linear-gradient(135deg,#ffd978,#d99a1e);color:#1a1205}
+.profile button:not(.on):hover{color:var(--qtext);background:#17223a}
+.profile-note{color:var(--qmuted);font-size:13px;margin:0;flex:1;min-width:240px}
+/* calendar */
+.cal-card{position:relative}
+.cal-year{margin:8px 0 14px}
+.cal-y{font:600 13px var(--mono);color:var(--qtext);margin-bottom:6px}
+.cal-y span{font-weight:500;color:var(--qmuted);margin-left:10px;font-size:11.5px}
+.cal-m,.cal-g{display:grid;grid-template-columns:repeat(53,minmax(0,1fr));gap:3px}
+.cal-m{font:500 10.5px var(--mono);color:var(--qmuted);margin-bottom:4px}
+.cal-m span{white-space:nowrap}
+.cal-g{grid-template-rows:repeat(5,auto)}
+.cal-g i{display:block;aspect-ratio:1;border-radius:3px;background:#1a2438}
+.cal-g i.z{background:#141d30}
+.cal-g i:hover{outline:2px solid #e6eaf2;outline-offset:0}
+.cal .scale i{flex:0 0 70px}
+.cal .scale i.neg{background:linear-gradient(90deg,#7c9cff,#2c3a6e)}
+.cal-tip{position:absolute}
+/* strategies */
+.strat td,.strat th{white-space:nowrap}
+.strat td:first-child{font-family:var(--sans);font-weight:600}
+.strat .lt{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(242,193,78,.14);color:var(--qgold);font:700 12px var(--mono);margin-right:8px}
+.strat th em{font:500 9.5px var(--mono);font-style:normal;color:var(--qgold);margin-left:4px}
+.strat .share{display:inline-block;width:70px;height:6px;border-radius:3px;background:#1a2438;vertical-align:middle;margin-right:8px;overflow:hidden}
+.strat .share b{display:block;height:100%;background:var(--qgold);border-radius:3px}
+.strat small{color:var(--qmuted);font-size:11.5px}
+.strat .pos{color:#e6eaf2}.strat .negv{color:#7c9cff}
+.spark{width:110px;height:28px;display:block}
+.spark path{fill:none;stroke:var(--qgold);stroke-width:1.6}
+.spark .z{stroke:#334155;stroke-width:1;stroke-dasharray:2 2}
+@media (max-width:760px){.profile{flex-wrap:wrap}.profile .pl{width:100%;padding:4px 8px}.cal-m{font-size:8px}.cal-g{gap:2px}}

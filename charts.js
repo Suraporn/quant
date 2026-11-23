@@ -1,19 +1,21 @@
-// QuadBreak charts: plain SVG + hover tooltips, no libraries. Data comes from qb_data.json.
+// QuadBreak dashboard: risk-profile switch, equity/drawdown, monthly heatmap, daily P&L calendar,
+// per-strategy table. Plain SVG/HTML, no libraries. Data: versions.json.
 (function () {
   const NS = "http://www.w3.org/2000/svg";
-  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const el = (tag, attrs = {}, parent) => {
     const e = document.createElementNS(NS, tag);
     for (const k in attrs) e.setAttribute(k, attrs[k]);
     if (parent) parent.appendChild(e);
     return e;
   };
-  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const $ = (s) => document.querySelector(s);
   const fmtDate = (s) => { const [y, m, d] = s.split("-"); return `${+d} ${MON[+m - 1]} ${y}`; };
-  const fmtMonth = (s) => { const [y, m] = s.split("-"); return `${MON[+m - 1]} ${y}`; };
   const fmtMoney = (v) => v >= 1e6 ? `$${(v / 1e6).toFixed(2)}M` : v >= 1e3 ? `$${(v / 1e3).toFixed(1)}K` : `$${v.toFixed(0)}`;
+  const sign = (v, d = 1) => `${v > 0 ? "+" : ""}${v.toFixed(d)}`;
 
   function frame(host, H, pad) {
+    host.innerHTML = "";
     const W = 1000;
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", class: "chart-svg" });
     host.appendChild(svg);
@@ -27,14 +29,10 @@
     if (left + f.tip.offsetWidth > box.width) left = px * sx - f.tip.offsetWidth - 14;
     f.tip.style.left = `${Math.max(0, left)}px`; f.tip.style.top = `${Math.max(0, top)}px`;
   }
-  function svgPoint(f, evt) {
-    const r = f.svg.getBoundingClientRect();
-    return [(evt.clientX - r.left) * f.W / r.width, (evt.clientY - r.top) * f.H / r.height];
-  }
+  function svgX(f, evt) { const r = f.svg.getBoundingClientRect(); return (evt.clientX - r.left) * f.W / r.width; }
   function xAxisMonths(f, dates, X) {
-    // a tick at the first day of every quarter
     dates.forEach((d, i) => {
-      const [y, m, dd] = d.split("-");
+      const [y, m] = d.split("-");
       if ((+m - 1) % 3 === 0 && (i === 0 || dates[i - 1].slice(0, 7) !== d.slice(0, 7))) {
         el("line", { x1: X(i), x2: X(i), y1: f.y1, y2: f.y1 + 5, class: "axis" }, f.svg);
         el("text", { x: X(i), y: f.y1 + 20, class: "tick", "text-anchor": "middle" }, f.svg).textContent = `${MON[+m - 1]} ${y.slice(2)}`;
@@ -45,111 +43,189 @@
     const i0 = dates.findIndex((d) => d >= "2026-01-01"), i1 = dates.findIndex((d) => d >= "2026-07-01");
     el("rect", { x: X(i0), y: f.y0, width: X(i1) - X(i0), height: f.y1 - f.y0, class: "band" }, f.svg);
     if (!labels) return;
-    const lbl = [["Test · 2025", 0, i0], ["Training", i0, i1], ["Test", i1, dates.length - 1]];
-    lbl.forEach(([t, a, b]) => el("text", { x: (X(a) + X(b)) / 2, y: f.y0 + 14, class: "band-label", "text-anchor": "middle" }, f.svg).textContent = t);
+    [["Test · 2025", 0, i0], ["Training", i0, i1], ["Test", i1, dates.length - 1]].forEach(([t, a, b]) =>
+      el("text", { x: (X(a) + X(b)) / 2, y: f.y0 + 14, class: "band-label", "text-anchor": "middle" }, f.svg).textContent = t);
   }
-
-  function equity(host, D) {
-    const f = frame(host, 360, { l: 64, r: 18, t: 24, b: 30 });
-    const n = D.dates.length, keys = ["b25", "d1", "d5", "raw"];
-    const lo = Math.log10(500), hi = Math.log10(1e7);
-    const X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
-    const Y = (v) => f.y1 - (f.y1 - f.y0) * (Math.log10(Math.max(v, 1)) - lo) / (hi - lo);
-    periodBands(f, D.dates, X);
-    [1e3, 1e4, 1e5, 1e6, 1e7].forEach((v) => {
-      el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: "grid" }, f.svg);
-      el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = fmtMoney(v);
-    });
-    xAxisMonths(f, D.dates, X);
-    keys.forEach((k) => {
-      const d = D.eq[k].map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
-      el("path", { d, class: k === "raw" ? "line-main" : "line-ctx" }, f.svg);
-    });
-    const last = n - 1;
-    const cross = el("line", { y1: f.y0, y2: f.y1, class: "cross", visibility: "hidden" }, f.svg);
-    const dot = el("circle", { r: 5, class: "dot", visibility: "hidden" }, f.svg);
-    const hit = el("rect", { x: f.x0, y: f.y0, width: f.x1 - f.x0, height: f.y1 - f.y0, class: "hit" }, f.svg);
-    const move = (e) => {
-      const [px] = svgPoint(f, e.touches ? e.touches[0] : e);
-      const i = Math.round(Math.min(Math.max((px - f.x0) / (f.x1 - f.x0), 0), 1) * last);
-      cross.setAttribute("x1", X(i)); cross.setAttribute("x2", X(i)); cross.setAttribute("visibility", "visible");
-      dot.setAttribute("cx", X(i)); dot.setAttribute("cy", Y(D.eq.raw[i])); dot.setAttribute("visibility", "visible");
-      const rows = ["raw", "b25", "d1", "d5"].map((k) => `<div class="r${k === "raw" ? " main" : ""}"><span>${D.labels[k]}</span><b>${fmtMoney(D.eq[k][i])}</b></div>`).join("");
-      showTip(f, `<div class="h">${fmtDate(D.dates[i])}</div>${rows}`, X(i), Y(D.eq.raw[i]));
-    };
-    const leave = () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); f.tip.hidden = true; };
-    hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true });
-    hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
-  }
-
-  function drawdown(host, D) {
-    const f = frame(host, 220, { l: 64, r: 18, t: 24, b: 30 });
-    const n = D.dates.length, X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
-    const Y = (v) => f.y0 + (f.y1 - f.y0) * (-v) / 60;
-    periodBands(f, D.dates, X, false);
-    [0, -20, -40, -60].forEach((v) => {
-      el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: v === 0 ? "axis" : "grid" }, f.svg);
-      el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = `${v}%`;
-    });
-    xAxisMonths(f, D.dates, X);
-    const pts = D.dd.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
-    el("path", { d: `M${X(0)},${Y(0)}L${pts.join("L")}L${X(n - 1)},${Y(0)}Z`, class: "area" }, f.svg);
-    el("path", { d: `M${pts.join("L")}`, class: "line-main thin" }, f.svg);
-    let mi = 0; D.dd.forEach((v, i) => { if (v < D.dd[mi]) mi = i; });
-    el("text", { x: X(mi) + 10, y: Y(D.dd[mi]) + 14, class: "direct" }, f.svg).textContent = `${D.dd[mi].toFixed(1)}% max`;
+  function hover(f, n, X, onMove, extra = []) {
     const cross = el("line", { y1: f.y0, y2: f.y1, class: "cross", visibility: "hidden" }, f.svg);
     const hit = el("rect", { x: f.x0, y: f.y0, width: f.x1 - f.x0, height: f.y1 - f.y0, class: "hit" }, f.svg);
     const move = (e) => {
-      const [px] = svgPoint(f, e.touches ? e.touches[0] : e);
+      const px = svgX(f, e.touches ? e.touches[0] : e);
       const i = Math.round(Math.min(Math.max((px - f.x0) / (f.x1 - f.x0), 0), 1) * (n - 1));
       cross.setAttribute("x1", X(i)); cross.setAttribute("x2", X(i)); cross.setAttribute("visibility", "visible");
-      showTip(f, `<div class="h">${fmtDate(D.dates[i])}</div><div class="r main"><span>Drawdown</span><b>${D.dd[i].toFixed(1)}%</b></div>`, X(i), Y(D.dd[i]));
+      onMove(i);
     };
-    const leave = () => { cross.setAttribute("visibility", "hidden"); f.tip.hidden = true; };
+    const leave = () => { cross.setAttribute("visibility", "hidden"); extra.forEach((x) => x.setAttribute("visibility", "hidden")); f.tip.hidden = true; };
     hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true });
     hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
   }
 
-  function heatmap(host, D) {
-    const years = [...new Set(D.months.map((m) => m.slice(0, 4)))];
-    const val = {}; D.months.forEach((m, i) => { val[m] = D.mret[i]; });
-    const pos = D.mret.filter((v) => v > 0), vmax = Math.max(...pos);
-    // sequential single hue (gold), dark -> light on the dark panel; sqrt scale so typical months stay readable
-    const shade = (v) => { const t = Math.sqrt(Math.min(v / vmax, 1));
-      const lerp = (a, b) => Math.round(a + (b - a) * t);
-      return t < 0.5 ? `rgb(${lerp(92, 242)},${lerp(69, 193)},${lerp(18, 78)})` : `rgb(${lerp(242, 255)},${lerp(193, 231)},${lerp(78, 163)})`; };
+  function equity(host, B, V) {
+    const f = frame(host, 360, { l: 64, r: 18, t: 24, b: 30 });
+    const n = B.dates.length, all = Object.values(V.eq).flat();
+    const lo = Math.log10(Math.min(...all) * 0.9);
+    const hi = Math.log10(Math.max(...all) * 1.15);
+    const X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
+    const Y = (v) => f.y1 - (f.y1 - f.y0) * (Math.log10(Math.max(v, 1)) - lo) / (hi - lo);
+    periodBands(f, B.dates, X);
+    const ticks = [];
+    for (let p = Math.floor(lo); p <= Math.ceil(hi); p++) [1, 2, 5].forEach((m) => ticks.push(m * Math.pow(10, p)));
+    const span = hi - lo, keep = span > 2.5 ? [1] : [1, 2, 5];
+    ticks.filter((v) => Math.log10(v) >= lo && Math.log10(v) <= hi && keep.includes(Math.round(v / Math.pow(10, Math.floor(Math.log10(v) + 1e-9)))))
+      .forEach((v) => {
+        el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: "grid" }, f.svg);
+        el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = fmtMoney(v);
+      });
+    xAxisMonths(f, B.dates, X);
+    ["b25", "d1", "d5", "raw"].forEach((k) => {
+      el("path", { d: V.eq[k].map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(""), class: k === "raw" ? "line-main" : "line-ctx" }, f.svg);
+    });
+    const dot = el("circle", { r: 5, class: "dot", visibility: "hidden" }, f.svg);
+    hover(f, n, X, (i) => {
+      dot.setAttribute("cx", X(i)); dot.setAttribute("cy", Y(V.eq.raw[i])); dot.setAttribute("visibility", "visible");
+      const rows = ["raw", "b25", "d1", "d5"].map((k) => `<div class="r${k === "raw" ? " main" : ""}"><span>${B.labels[k]}</span><b>${fmtMoney(V.eq[k][i])}</b></div>`).join("");
+      showTip(f, `<div class="h">${fmtDate(B.dates[i])}</div>${rows}`, X(i), Y(V.eq.raw[i]));
+    }, [dot]);
+  }
+
+  function drawdown(host, B, V) {
+    const f = frame(host, 260, { l: 64, r: 18, t: 24, b: 30 });
+    const n = B.dates.length, X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
+    const floor = -Math.min(...V.dd), step = floor > 30 ? 20 : floor > 12 ? 5 : 2;
+    const lim = Math.ceil((floor * 1.1) / step) * step;
+    const Y = (v) => f.y0 + (f.y1 - f.y0) * (-v) / lim;
+    periodBands(f, B.dates, X, false);
+    for (let v = 0; v >= -lim; v -= step) {
+      el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: v === 0 ? "axis" : "grid" }, f.svg);
+      el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = `${v}%`;
+    }
+    xAxisMonths(f, B.dates, X);
+    const pts = V.dd.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
+    el("path", { d: `M${X(0)},${Y(0)}L${pts.join("L")}L${X(n - 1)},${Y(0)}Z`, class: "area" }, f.svg);
+    el("path", { d: `M${pts.join("L")}`, class: "line-main thin" }, f.svg);
+    let mi = 0; V.dd.forEach((v, i) => { if (v < V.dd[mi]) mi = i; });
+    el("text", { x: X(mi) + 10, y: Math.min(Y(V.dd[mi]) + 14, f.y1 - 4), class: "direct" }, f.svg).textContent = `${V.dd[mi].toFixed(1)}% max`;
+    hover(f, n, X, (i) => showTip(f, `<div class="h">${fmtDate(B.dates[i])}</div><div class="r main"><span>Drawdown</span><b>${V.dd[i].toFixed(1)}%</b></div>`, X(i), Y(V.dd[i])));
+  }
+
+  // sequential gold (gains) and blue (losses) on the dark panel; sqrt keeps typical values readable
+  function gold(t) {
+    t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
+    return t < 0.5 ? `rgb(${L(92, 242)},${L(69, 193)},${L(18, 78)})` : `rgb(${L(242, 255)},${L(193, 231)},${L(78, 163)})`;
+  }
+  function blue(t) {
+    t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
+    return `rgb(${L(44, 124)},${L(58, 156)},${L(110, 255)})`;
+  }
+
+  function heatmap(host, B, V) {
+    const years = [...new Set(B.months.map((m) => m.slice(0, 4)))];
+    const val = {}; B.months.forEach((m, i) => { val[m] = V.mret[i]; });
+    const vmax = Math.max(...V.mret), dec = vmax < 20 ? 1 : 0;
     let h = '<table><thead><tr><th class="y"></th>' + MON.map((m) => `<th>${m}</th>`).join("") + "</tr></thead><tbody>";
     years.forEach((y) => {
       h += `<tr><th class="y">${y}</th>`;
       for (let m = 1; m <= 12; m++) {
         const k = `${y}-${String(m).padStart(2, "0")}`, v = val[k];
         if (v === undefined) { h += '<td class="empty"></td>'; continue; }
-        const partial = k === D.months[D.months.length - 1] ? " (to Nov 12)" : "";
-        const txt = `${v > 0 ? "+" : ""}${Math.round(v)}`;
-        h += v < 0 ? `<td class="neg" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${txt}</td>`
-                   : `<td style="background:${shade(v)};color:${Math.sqrt(Math.min(v / vmax, 1)) < 0.42 ? "#f6e7c1" : "#1a1205"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">${txt}</td>`;
+        const partial = k === B.months[B.months.length - 1] ? " (to Nov 12)" : "";
+        const t = v / vmax;
+        h += v < 0 ? `<td class="neg" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}</td>`
+                   : `<td style="background:${gold(t)};color:${Math.sqrt(t) < 0.42 ? "#f6e7c1" : "#1a1205"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}</td>`;
       }
       h += "</tr>";
     });
-    h += '</tbody></table><div class="scale"><span>0%</span><i></i><span>+' + Math.round(vmax) + '%</span><span style="margin-left:10px">values in %</span></div>';
-    host.innerHTML = h;
+    host.innerHTML = h + `</tbody></table><div class="scale"><span>0%</span><i></i><span>+${Math.round(vmax)}%</span><span style="margin-left:10px">values in %</span></div>`;
   }
 
-  function tabs() {
+  // GitHub-style calendar of daily P&L (weekdays), one block per year
+  function calendar(host, V) {
+    const days = Object.keys(V.daily).sort(), vals = Object.values(V.daily).map(Math.abs).sort((a, b) => a - b);
+    const cap = vals[Math.floor(vals.length * 0.95)] || 1;
+    const tip = host.parentElement.querySelector(".cal-tip");
+    let html = "";
+    [...new Set(days.map((d) => d.slice(0, 4)))].forEach((y) => {
+      const start = new Date(`${y}-01-01T00:00:00Z`), end = y === "2026" ? new Date("2026-11-11T00:00:00Z") : new Date(`${y}-12-31T00:00:00Z`);
+      const lead = (start.getUTCDay() + 6) % 7; // Monday = 0
+      let cells = "", months = "", lastMon = -1, gains = 0, losses = 0;
+      for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+        const dow = (d.getUTCDay() + 6) % 7;
+        if (dow > 4) continue;                    // weekdays only
+        const idx = Math.floor((lead + Math.round((d - start) / 864e5)) / 7);
+        if (d.getUTCMonth() !== lastMon) { lastMon = d.getUTCMonth(); months += `<span style="grid-column:${idx + 1}">${MON[lastMon]}</span>`; }
+        const key = d.toISOString().slice(0, 10), v = V.daily[key];
+        let style = "", cls = "c";
+        if (v === undefined || Math.abs(v) < 1e-9) cls += " z";
+        else { style = `background:${v > 0 ? gold(v / cap) : blue(-v / cap)}`; v > 0 ? gains++ : losses++; }
+        cells += `<i class="${cls}" style="grid-column:${idx + 1};grid-row:${dow + 1};${style}" data-d="${key}" data-v="${v === undefined ? "" : v}"></i>`;
+      }
+      html += `<div class="cal-year"><div class="cal-y">${y}<span>${gains} up · ${losses} down days</span></div><div class="cal-m">${months}</div><div class="cal-g">${cells}</div></div>`;
+    });
+    html += `<div class="scale"><span>Loss</span><i class="neg"></i><span>Gain</span><i></i><span style="margin-left:10px">daily % change · weekdays · hover a day</span></div>`;
+    host.innerHTML = html;
+    host.querySelectorAll("i.c").forEach((c) => {
+      const on = () => {
+        const v = c.dataset.v;
+        tip.innerHTML = `<div class="h">${fmtDate(c.dataset.d)}</div><div class="r main"><span>Daily P&amp;L</span><b>${v === "" ? "no trades" : sign(+v, 2) + "%"}</b></div>`;
+        tip.hidden = false;
+        const hb = host.getBoundingClientRect(), cb = c.getBoundingClientRect();
+        let left = cb.left - hb.left + 16; if (left + tip.offsetWidth > hb.width) left = cb.left - hb.left - tip.offsetWidth - 6;
+        tip.style.left = `${left}px`; tip.style.top = `${cb.top - hb.top - 8}px`;
+      };
+      c.addEventListener("mouseenter", on); c.addEventListener("touchstart", on, { passive: true });
+      c.addEventListener("mouseleave", () => { tip.hidden = true; });
+    });
+  }
+
+  function strategies(host, S) {
+    const maxR = Math.max(...S.map((s) => Math.max(...s.cum))), minR = Math.min(0, ...S.map((s) => Math.min(...s.cum)));
+    const spark = (cum) => {
+      const w = 110, h = 28, n = cum.length;
+      const X = (i) => 2 + (w - 4) * i / (n - 1), Y = (v) => h - 3 - (h - 6) * (v - minR) / (maxR - minR);
+      return `<svg viewBox="0 0 ${w} ${h}" class="spark" aria-hidden="true"><line x1="2" x2="${w - 2}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" class="z"/><path d="${cum.map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("")}"/></svg>`;
+    };
+    const oos = (v) => `<span class="${v >= 0 ? "pos" : "negv"}">${sign(v, 1)}R</span>`;
+    host.innerHTML = `<div class="tablewrap"><table class="qb-table strat"><thead><tr><th>Strategy</th><th>Trades</th><th>Win rate</th><th>Profit factor</th><th>Expectancy</th><th>Total</th><th>Share of profit</th><th>2025 <em>OOS</em></th><th>Jul–Nov 26 <em>OOS</em></th><th>Cumulative R</th></tr></thead><tbody>` +
+      S.map((s) => `<tr><td><span class="lt">${s.label.slice(-1)}</span>${s.label}</td><td>${s.trades}</td><td>${s.win.toFixed(0)}%</td><td>${s.pf.toFixed(2)}</td><td>${sign(s.exp, 2)}R</td><td>${sign(s.totR, 0)}R</td><td><div class="share"><b style="width:${s.share.toFixed(1)}%"></b></div><small>${s.share.toFixed(0)}%</small></td><td>${oos(s.per["2025"])}</td><td>${oos(s.per.JulNov)}</td><td>${spark(s.cum)}</td></tr>`).join("") +
+      `</tbody></table></div>`;
+  }
+
+  // ---------- wiring ----------
+  let DATA, current = "high";
+  function render() {
+    const B = DATA.base, V = DATA.versions[current], K = V.kpi;
+    const set = (k, v) => { const e = document.querySelector(`[data-kpi="${k}"]`); if (e) e.textContent = v; };
+    set("avg_month", `${K.avg_month.toFixed(1)}%`); set("mdd", `${K.mdd.toFixed(1)}%`); set("sharpe", K.sharpe.toFixed(2));
+    set("sortino", K.sortino.toFixed(1)); set("calmar", K.calmar >= 100 ? K.calmar.toFixed(0) : K.calmar.toFixed(1)); set("pf", K.pf.toFixed(2));
+    set("win", `${K.win.toFixed(0)}%`); set("trades", K.trades.toLocaleString("en-US")); set("pos_months", `${K.pos_months}/${K.n_months}`);
+    set("risk", `${(+V.risk_per_strategy.toFixed(2))}% per strategy · volatility targeting`);
+    document.querySelectorAll("[data-period]").forEach((tr) => {
+      const p = V.periods.find((x) => x.w === tr.dataset.period);
+      tr.querySelector(".g").textContent = `${p.growth.toFixed(1)}%`; tr.querySelector(".m").textContent = `${p.mdd.toFixed(1)}%`;
+    });
+    const note = $("#profile-note");
+    if (note) note.textContent = current === "high"
+      ? "High is QuadBreak's live setting: 2.2% risk per strategy."
+      : `${current === "medium" ? "Medium" : "Low"} uses ${(+V.risk_per_strategy.toFixed(2))}% risk per strategy, scaled so the full-period max drawdown is about ${current === "medium" ? "20" : "10"}% in the raw-spread condition. Same signals, smaller positions.`;
+    equity($("#chart-equity"), B, V);
+    drawdown($("#chart-dd"), B, V);
+    heatmap($("#heatmap"), B, V);
+    calendar($("#calendar"), V);
+  }
+  function wire() {
     document.querySelectorAll(".qb .tab").forEach((t) => t.addEventListener("click", () => {
       document.querySelectorAll(".qb .tab").forEach((x) => { x.classList.toggle("on", x === t); x.setAttribute("aria-selected", x === t); });
       const eq = t.dataset.view === "equity";
-      document.getElementById("chart-equity").hidden = !eq; document.getElementById("chart-dd").hidden = eq;
-      document.querySelector(".qb .legend").style.visibility = eq ? "visible" : "hidden";
+      $("#chart-equity").hidden = !eq; $("#chart-dd").hidden = eq;
+      $(".qb .chart-legend").style.visibility = eq ? "visible" : "hidden";
+    }));
+    document.querySelectorAll(".profile button").forEach((b) => b.addEventListener("click", () => {
+      current = b.dataset.p;
+      document.querySelectorAll(".profile button").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
+      render();
     }));
   }
-
-  fetch("qb_data.json?v=2").then((r) => r.json()).then((D) => {
-    equity(document.getElementById("chart-equity"), D);
-    drawdown(document.getElementById("chart-dd"), D);
-    heatmap(document.getElementById("heatmap"), D);
-    tabs();
-  }).catch(() => {
-    document.querySelectorAll(".chart-host").forEach((h) => { h.textContent = "Chart data couldn't load."; });
-  });
+  fetch("versions.json?v=2").then((r) => r.json()).then((D) => {
+    DATA = D; wire(); render(); strategies($("#strategies"), D.strategies);
+  }).catch((err) => { console.error(err); document.querySelectorAll(".chart-host,#heatmap,#calendar,#strategies").forEach((h) => { h.textContent = "Data couldn't load."; }); });
 })();

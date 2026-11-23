@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -58,29 +58,33 @@
 <div class="qb-arch">
 <div class="mod"><div class="ic">◈</div><b>Signal layer</b><span>9 independent strategies</span></div>
 <div class="arrow">→</div>
-<div class="mod"><div class="ic">◐</div><b>Risk engine</b><span>2.2% per strategy · volatility targeting</span></div>
+<div class="mod"><div class="ic">◐</div><b>Risk engine</b><span data-kpi="risk">2.2% per strategy · volatility targeting</span></div>
 <div class="arrow">→</div>
 <div class="mod"><div class="ic">▲</div><b>Execution</b><span>MQL5 expert advisor · MT5</span></div>
 <div class="arrow">→</div>
 <div class="mod"><div class="ic">◉</div><b>Monitoring</b><span>On-chart panel · kill switch · spread guard</span></div>
 </div>
 
+<div class="profile-row">
+<div class="profile" role="group" aria-label="Risk profile"><span class="pl">Risk profile</span><button data-p="low" aria-pressed="false">Low <small>~10% DD</small></button><button data-p="medium" aria-pressed="false">Medium <small>~20% DD</small></button><button data-p="high" class="on" aria-pressed="true">High <small>live · ~50% DD</small></button></div>
+<p id="profile-note" class="profile-note">High is QuadBreak's live setting: 2.2% risk per strategy.</p>
+</div>
 <div class="qb-kpis">
-<div><span>Avg. monthly growth</span><b>40.6%</b></div>
-<div><span>Max drawdown</span><b>49.2%</b></div>
-<div><span>Sharpe</span><b>3.08</b></div>
-<div><span>Sortino</span><b>10.3</b></div>
-<div><span>Calmar</span><b>119</b></div>
-<div><span>Profit factor</span><b>1.39</b></div>
-<div><span>Win rate</span><b>46%</b></div>
-<div><span>Trades</span><b>1,678</b></div>
-<div><span>Profitable months</span><b>22/23</b></div>
+<div><span>Avg. monthly growth</span><b data-kpi="avg_month">40.6%</b></div>
+<div><span>Max drawdown</span><b data-kpi="mdd">49.2%</b></div>
+<div><span>Sharpe</span><b data-kpi="sharpe">3.08</b></div>
+<div><span>Sortino</span><b data-kpi="sortino">10.3</b></div>
+<div><span>Calmar</span><b data-kpi="calmar">119</b></div>
+<div><span>Profit factor</span><b data-kpi="pf">1.39</b></div>
+<div><span>Win rate</span><b data-kpi="win">46%</b></div>
+<div><span>Trades</span><b data-kpi="trades">1,678</b></div>
+<div><span>Profitable months</span><b data-kpi="pos_months">22/23</b></div>
 </div>
 
 <div class="qb-card">
 <div class="qb-card-head">
 <div class="tabs" role="tablist"><button class="tab on" data-view="equity" role="tab" aria-selected="true">Equity</button><button class="tab" data-view="dd" role="tab" aria-selected="false">Drawdown</button></div>
-<div class="legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
+<div class="legend chart-legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
 </div>
 <div class="chart-host" id="chart-equity" aria-label="Growth of $1,000, log scale"></div>
 <div class="chart-host" id="chart-dd" aria-label="Drawdown chart" hidden></div>
@@ -96,9 +100,9 @@
 <table class="qb-table" aria-label="QuadBreak v1.60 results by period">
 <thead><tr><th>Period</th><th>Monthly</th><th>Max DD</th></tr></thead>
 <tbody>
-<tr><td>2025 <em>out-of-sample</em></td><td>37.0%</td><td>51.7%</td></tr>
-<tr><td>Jan–Jun 2026 <em class="train">training</em></td><td>47.4%</td><td>41.3%</td></tr>
-<tr><td>Jul–Nov 2026 <em>out-of-sample</em></td><td>36.8%</td><td>39.7%</td></tr>
+<tr data-period="2025"><td>2025 <em>out-of-sample</em></td><td class="g"></td><td class="m"></td></tr>
+<tr data-period="Train"><td>Jan–Jun 2026 <em class="train">training</em></td><td class="g"></td><td class="m"></td></tr>
+<tr data-period="JulNov"><td>Jul–Nov 2026 <em>out-of-sample</em></td><td class="g"></td><td class="m"></td></tr>
 </tbody>
 </table>
 <div class="qb-checks">
@@ -110,7 +114,19 @@
 </div>
 </div>
 
-<p class="qb-foot">v1.60 at its live setting, simulated on 151M+ ticks from Jan 2025 to Nov 12, 2026, starting from $1,000. Stats use the raw-spread condition, the weakest of four tested. Sharpe and Sortino are annualized from daily returns. Calmar is the annualized compound return divided by max drawdown, and it's large because gains compound monthly. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+<div class="qb-card cal-card">
+<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">raw-spread condition · selected risk profile</span></div>
+<div id="calendar" class="cal"></div>
+<div class="chart-tip cal-tip" hidden></div>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Strategy breakdown</b><span class="muted">9 strategies, anonymized · in R (1R = the risk on one trade) · raw-spread condition</span></div>
+<div id="strategies"></div>
+<p class="muted" style="margin:10px 0 4px;font-size:12.5px">R-multiples measure each strategy's signal quality independent of position size, so this table is the same for every risk profile. Strategy names and rules are kept private.</p>
+</div>
+
+<p class="qb-foot">v1.60, simulated on 151M+ ticks from Jan 2025 to Nov 12, 2026, starting from $1,000. Stats use the raw-spread condition, the weakest of four tested. Sharpe and Sortino are annualized from daily returns. Calmar is the annualized compound return divided by max drawdown, and it's large because gains compound monthly. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
 </div>
 </section>
 
@@ -300,6 +316,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=3"></script>
+<script src="charts.js?v=4"></script>
 </body>
 </html>
