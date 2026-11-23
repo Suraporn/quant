@@ -213,7 +213,7 @@
       if (g) g.textContent = `${p.growth.toFixed(1)}%`; if (m) m.textContent = `${p.mdd.toFixed(1)}%`;
     });
     const tb = $("#profiles");
-    if (tb) tb.innerHTML = [["high", "High <em>live</em>"], ["medium", "Medium"], ["low", "Low"]].map(([p, lab]) => {
+    if (tb) tb.innerHTML = [["low", "Low"], ["medium", "Medium"], ["high", "High <em>live</em>"]].map(([p, lab]) => {
       const P = DATA.versions[p], k = P.kpi;
       const money = k.final >= 1e6 ? `$${(k.final / 1e6).toFixed(2)}M` : `$${Math.round(k.final).toLocaleString("en-US")}`;
       return `<tr${p === "high" ? ' class="on"' : ""}><td>${lab}</td><td>${(+P.risk_per_strategy.toFixed(2))}%</td><td class="up">${k.avg_month.toFixed(1)}%</td><td class="dn">${k.mdd.toFixed(1)}%</td><td class="dn">${k.worst_cond_mdd.toFixed(1)}%</td><td>${k.sharpe.toFixed(2)}</td><td>${k.calmar >= 100 ? k.calmar.toFixed(0) : k.calmar.toFixed(1)}</td><td>${money}</td></tr>`;
