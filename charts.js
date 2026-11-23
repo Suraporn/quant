@@ -43,8 +43,9 @@
     const i0 = dates.findIndex((d) => d >= "2026-01-01"), i1 = dates.findIndex((d) => d >= "2026-07-01");
     el("rect", { x: X(i0), y: f.y0, width: X(i1) - X(i0), height: f.y1 - f.y0, class: "band" }, f.svg);
     if (!labels) return;
-    [["Test · 2025", 0, i0], ["Training", i0, i1], ["Test", i1, dates.length - 1]].forEach(([t, a, b]) =>
-      el("text", { x: (X(a) + X(b)) / 2, y: f.y0 + 14, class: "band-label", "text-anchor": "middle" }, f.svg).textContent = t);
+    [i0, i1].forEach((i) => el("line", { x1: X(i), x2: X(i), y1: f.y0 - 16, y2: f.y1, class: "band-edge" }, f.svg));
+    [["Test 2025", 0, i0], ["Training · Jan–Jun 2026", i0, i1], ["Test 2026", i1, dates.length - 1]].forEach(([t, a, b]) =>
+      el("text", { x: (X(a) + X(b)) / 2, y: f.y0 - 6, class: "band-label", "text-anchor": "middle" }, f.svg).textContent = t);
   }
   function hover(f, n, X, onMove, extra = []) {
     const cross = el("line", { y1: f.y0, y2: f.y1, class: "cross", visibility: "hidden" }, f.svg);
@@ -61,7 +62,7 @@
   }
 
   function equity(host, B, V) {
-    const f = frame(host, 360, { l: 64, r: 18, t: 24, b: 30 });
+    const f = frame(host, 370, { l: 64, r: 18, t: 30, b: 30 });
     const n = B.dates.length, all = Object.values(V.eq).flat();
     const lo = Math.log10(Math.min(...all) * 0.9);
     const hi = Math.log10(Math.max(...all) * 1.15);
@@ -102,7 +103,7 @@
     xAxisMonths(f, B.dates, X);
     const pts = V.dd.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
     el("path", { d: `M${X(0)},${Y(0)}L${pts.join("L")}L${X(n - 1)},${Y(0)}Z`, class: "area" }, f.svg);
-    el("path", { d: `M${pts.join("L")}`, class: "line-main thin" }, f.svg);
+    el("path", { d: `M${pts.join("L")}`, class: "line-main dd thin" }, f.svg);
     let mi = 0; V.dd.forEach((v, i) => { if (v < V.dd[mi]) mi = i; });
     el("text", { x: X(mi) + 10, y: Math.min(Y(V.dd[mi]) + 14, f.y1 - 4), class: "direct" }, f.svg).textContent = `${V.dd[mi].toFixed(1)}% max`;
     hover(f, n, X, (i) => showTip(f, `<div class="h">${fmtDate(B.dates[i])}</div><div class="r main"><span>Drawdown</span><b>${V.dd[i].toFixed(1)}%</b></div>`, X(i), Y(V.dd[i])));
@@ -138,8 +139,8 @@
         if (v === undefined) { h += '<td class="empty"></td>'; continue; }
         const partial = k === B.months[B.months.length - 1] ? " (to Nov 12)" : "";
         const t = v / vmax;
-        h += v < 0 ? `<td class="neg" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}%</td>`
-                   : `<td style="background:${gold(t)};color:${Math.sqrt(t) < 0.42 ? "#f6e7c1" : "#1a1205"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}%</td>`;
+        h += v < 0 ? `<td class="neg" style="background:${red(Math.min(-v / vmax * 3, 1))}" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}%</td>`
+                   : `<td style="background:${green(t)};color:${Math.sqrt(t) < 0.55 ? "#eafff1" : "#06240f"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}%</td>`;
       }
       h += "</tr>";
     });

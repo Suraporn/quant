@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -93,10 +93,11 @@
 <div class="qb-card">
 <div class="qb-card-head"><b>Return by period</b><span class="muted">fresh $1,000 start · worst of the four conditions</span></div>
 <div class="tablewrap"><table class="qb-table periods" aria-label="QuadBreak v1.60 results by period">
-<thead><tr><th></th><th>2025 <em>out-of-sample</em></th><th>Jan–Jun 2026 <em class="train">training</em></th><th>Jul–Nov 2026 <em>out-of-sample</em></th></tr></thead>
+<thead><tr><th>Period</th><th>Avg. monthly growth</th><th>Max drawdown</th></tr></thead>
 <tbody>
-<tr><td>Avg. monthly growth</td><td data-pg="2025"></td><td data-pg="Train"></td><td data-pg="JulNov"></td></tr>
-<tr><td>Max drawdown</td><td data-pm="2025"></td><td data-pm="Train"></td><td data-pm="JulNov"></td></tr>
+<tr><td>2025 <em>out-of-sample</em></td><td data-pg="2025"></td><td data-pm="2025"></td></tr>
+<tr><td>Jan–Jun 2026 <em class="train">training</em></td><td data-pg="Train"></td><td data-pm="Train"></td></tr>
+<tr><td>Jul–Nov 2026 <em>out-of-sample</em></td><td data-pg="JulNov"></td><td data-pm="JulNov"></td></tr>
 </tbody>
 </table></div>
 <div class="qb-checks">
@@ -314,6 +315,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=5"></script>
+<script src="charts.js?v=6"></script>
 </body>
 </html>
