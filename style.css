@@ -236,9 +236,9 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 .heat th.y{text-align:left;padding-right:6px}
 .heat td{height:34px;border-radius:6px;text-align:center;color:#1a1205;font-variant-numeric:tabular-nums;cursor:default}
 .heat td.empty{background:rgba(255,255,255,.03)}
-.heat td.neg{color:#fff}
+.heat td.neg{}
 .heat .scale,.cal .scale{display:flex;align-items:center;gap:8px;color:var(--qmuted);font:500 11px var(--mono);margin:8px 0 4px}
-.heat .scale i,.cal .scale i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#143c24,#4ade80)}
+.heat .scale i,.cal .scale i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#bbf7d0,#15803d)}
 .qb-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:2px}
 .qb-table th{color:var(--qmuted);font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.04em;text-align:left;padding:8px 6px;border-bottom:1px solid var(--qline)}
 .qb-table td{padding:10px 6px;border-bottom:1px solid var(--qline);font-variant-numeric:tabular-nums}
@@ -275,7 +275,7 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 .cal-g i.z{background:#141d30}
 .cal-g i:hover{outline:2px solid #e6eaf2;outline-offset:0}
 .cal .scale i{flex:0 0 70px}
-.cal .scale i{background:linear-gradient(90deg,#143c24,#4ade80)}.cal .scale i.neg{background:linear-gradient(90deg,#f87171,#50181c)}
+.cal .scale i{background:linear-gradient(90deg,#bbf7d0,#15803d)}.cal .scale i.neg{background:linear-gradient(90deg,#b91c1c,#fecaca)}
 .cal-tip{position:absolute}
 /* strategies */
 .strat td,.strat th{white-space:nowrap}
