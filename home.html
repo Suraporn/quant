@@ -25,7 +25,7 @@
 <div class="eyebrow">Quantitative Researcher · Algorithmic Trading · ML</div>
 <h1>Trading systems that are tested hard before they trade.</h1>
 <p class="lead">I'm a quantitative researcher and data scientist with 10+ years of experience in machine learning, statistical modeling and optimization. I&nbsp;design, backtest and run algorithmic trading systems end to end, from a tick-level research engine in Python to a live MQL5 system, and I use agentic AI workflows to move from idea to tested result quickly.</p>
-<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn primary" href="#alfred">See Alfred</a><a class="btn" href="files/resume.pdf?v=5" target="_blank">Download résumé</a></div>
+<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn primary" href="#alfred">See Alfred</a><a class="btn" href="files/resume.pdf?v=6" target="_blank">Download résumé</a></div>
 <div class="socials">
 <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn ↗</a>
 <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio ↗</a>
@@ -162,7 +162,7 @@
 <div class="qb-arch">
 <div class="mod"><div class="ic">◈</div><b>Signal</b><span>One intraday setup, first signal of the day only</span></div>
 <div class="arrow">→</div>
-<div class="mod"><div class="ic">◐</div><b>Risk</b><span>1% base risk · capped recovery sizing</span></div>
+<div class="mod"><div class="ic">◐</div><b>Risk</b><span>1% of balance per trade · capped recovery sizing</span></div>
 <div class="arrow">→</div>
 <div class="mod"><div class="ic">▲</div><b>Execution</b><span>MQL5 expert advisor · MT5</span></div>
 <div class="arrow">→</div>
@@ -170,7 +170,7 @@
 </div>
 
 <div class="qb-kpis">
-<div><span>Avg. monthly gain</span><b data-akpi="avg_month">–</b></div>
+<div><span>Avg. monthly growth</span><b data-akpi="avg_month">–</b></div>
 <div><span>Max drawdown</span><b data-akpi="mdd">–</b></div>
 <div><span>Sharpe</span><b data-akpi="sharpe">–</b></div>
 <div><span>Sortino</span><b data-akpi="sortino">–</b></div>
@@ -182,7 +182,7 @@
 </div>
 
 <div class="qb-card">
-<div class="qb-card-head"><b>Equity <span class="muted">$1,000 start, fixed 1% base risk, no compounding</span></b>
+<div class="qb-card-head"><b>Equity <span class="muted">growth of $1,000, log scale · 1% base risk, compounding</span></b>
 <div class="legend chart-legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
 </div>
 <div class="chart-host" id="al-equity" aria-label="Alfred equity"></div>
@@ -193,7 +193,7 @@
 <div class="qb-card">
 <div class="qb-card-head"><b>Return by period</b><span class="muted">fresh $1,000 start · worst of the four conditions</span></div>
 <div class="tablewrap"><table class="qb-table periods" aria-label="Alfred results by period">
-<thead><tr><th>Period</th><th>Avg. monthly gain</th><th>Max drawdown</th></tr></thead>
+<thead><tr><th>Period</th><th>Avg. monthly growth</th><th>Max drawdown</th></tr></thead>
 <tbody>
 <tr><td>2025 <em>out-of-sample</em></td><td data-apg="2025"></td><td data-apm="2025"></td></tr>
 <tr><td>Jan–Jun 2026 <em class="train">training</em></td><td data-apg="Train"></td><td data-apm="Train"></td></tr>
@@ -203,17 +203,17 @@
 </div>
 
 <div class="qb-card">
-<div class="qb-card-head"><b>Monthly returns</b><span class="muted">% of the $1,000 start · raw-spread condition</span></div>
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">raw-spread condition</span></div>
 <div id="al-heatmap" class="heat" aria-label="Alfred monthly returns"></div>
 </div>
 
 <div class="qb-card cal-card">
-<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">% of the $1,000 start · raw-spread condition</span></div>
+<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">raw-spread condition</span></div>
 <div id="al-calendar" class="cal"></div>
 <div class="chart-tip cal-tip" hidden></div>
 </div>
 
-<p class="qb-foot">v1.01, simulated on tick data from Jan 2025 to Nov 12, 2026, with a fixed $10 base risk on $1,000 (no compounding), so monthly and daily returns are shown as a share of the $1,000 start. Stats use the raw-spread condition, the weakest of four tested. Sharpe and Sortino are annualized from daily returns. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+<p class="qb-foot">v1.01, simulated on tick data from Jan 2025 to Nov 12, 2026, the way the EA trades: risk is 1% of the current balance per trade (compounding), stepped up after a loss within a hard cap. Stats use the raw-spread condition, the weakest of four tested; avg. monthly growth is the compounded monthly rate. Sharpe and Sortino are annualized from daily returns. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
 </div>
 </section>
 
@@ -324,7 +324,7 @@
 
 <section id="experience">
 <h2>Experience</h2>
-<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=5" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
+<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=6" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
 <div class="timeline">
 <div class="job"><div class="when">10/2025 – present</div><div>
 <h3>Data Analyst</h3><div class="org">Meta (via Tundra Technical Solutions) · Vancouver, BC</div>
@@ -391,6 +391,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=12"></script>
+<script src="charts.js?v=13"></script>
 </body>
 </html>

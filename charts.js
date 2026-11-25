@@ -239,7 +239,7 @@
   }).catch((err) => { console.error(err); document.querySelectorAll("#chart-equity,#chart-dd,#heatmap,#calendar,#strategies").forEach((h) => { h.textContent = "Data couldn't load."; }); });
 
   // ---------- Alfred (second system) ----------
-  if ($("#al-equity")) fetch("alfred.json?v=1").then((r) => r.json()).then((A) => {
+  if ($("#al-equity")) fetch("alfred.json?v=2").then((r) => r.json()).then((A) => {
     const B = A.base, V = A.versions.high, K = V.kpi;
     const set = (k, v) => { const e = document.querySelector(`[data-akpi="${k}"]`); if (e) e.textContent = v; };
     set("avg_month", `${K.avg_month.toFixed(1)}%`); set("mdd", `${K.mdd.toFixed(1)}%`); set("sharpe", K.sharpe.toFixed(2));
