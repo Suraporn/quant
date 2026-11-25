@@ -309,3 +309,8 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 .heat th:first-child,.heat td:first-child{width:52px}
 @media (max-width:760px){.profiles td,.profiles td:first-child{font-size:12.5px}.profiles th{font-size:9.5px}.heat th:first-child,.heat td:first-child{width:34px}}
 @media (max-width:760px){.heat table{min-width:600px}}
+
+.cal-row{display:grid;grid-template-columns:30px 1fr;gap:6px}
+.cal-d{display:grid;grid-template-rows:repeat(5,1fr);gap:3px;font:500 10px var(--mono);color:var(--qmuted)}
+.cal-d span{display:flex;align-items:center}
+@media (max-width:760px){.cal-row{grid-template-columns:22px 1fr;gap:3px}.cal-d{font-size:8px;gap:2px}}

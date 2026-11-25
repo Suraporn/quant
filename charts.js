@@ -179,9 +179,9 @@
         else { style = `background:${v > 0 ? green(v / cap) : red(-v / cap)}`; v > 0 ? gains++ : losses++; }
         cells += `<i class="${cls}" style="grid-column:${idx + 1};grid-row:${dow + 1};${style}" data-d="${key}" data-v="${v === undefined ? "" : v}"></i>`;
       }
-      html += `<div class="cal-year"><div class="cal-y">${y}<span>${gains} up · ${losses} down days</span></div><div class="cal-m">${months}</div><div class="cal-g">${cells}</div></div>`;
+      html += `<div class="cal-year"><div class="cal-y">${y}<span>${gains} up · ${losses} down days</span></div><div class="cal-row"><div></div><div class="cal-m">${months}</div></div><div class="cal-row"><div class="cal-d"><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span></div><div class="cal-g">${cells}</div></div></div>`;
     });
-    html += `<div class="scale"><span>Loss</span><i class="neg"></i><span>Gain</span><i></i><span style="margin-left:10px">daily % change · weekdays · hover a day</span></div>`;
+    html += `<div class="scale"><span>Loss</span><i class="neg"></i><span>Gain</span><i></i><span style="margin-left:10px">daily % change · weeks start Monday · dark = no trading (holiday or no trade) · hover a day</span></div>`;
     host.innerHTML = html;
     host.querySelectorAll("i.c").forEach((c) => {
       const on = () => {
