@@ -64,10 +64,20 @@
   function equity(host, B, V) {
     const f = frame(host, 370, { l: 64, r: 18, t: 30, b: 30 });
     const n = B.dates.length, all = Object.values(V.eq).flat();
+    const X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
+    let Y;
+    if (V.scale === "linear") {
+      const step = 500, lo = Math.floor(Math.min(...all) / step) * step, hi = Math.ceil(Math.max(...all) * 1.04 / step) * step;
+      Y = (v) => f.y1 - (f.y1 - f.y0) * (v - lo) / (hi - lo);
+      periodBands(f, B.dates, X);
+      for (let v = lo; v <= hi; v += step) {
+        el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: "grid" }, f.svg);
+        el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = `$${v.toLocaleString("en-US")}`;
+      }
+    } else {
     const lo = Math.log10(Math.min(...all) * 0.9);
     const hi = Math.log10(Math.max(...all) * 1.15);
-    const X = (i) => f.x0 + (f.x1 - f.x0) * i / (n - 1);
-    const Y = (v) => f.y1 - (f.y1 - f.y0) * (Math.log10(Math.max(v, 1)) - lo) / (hi - lo);
+    Y = (v) => f.y1 - (f.y1 - f.y0) * (Math.log10(Math.max(v, 1)) - lo) / (hi - lo);
     periodBands(f, B.dates, X);
     const ticks = [];
     for (let p = Math.floor(lo); p <= Math.ceil(hi); p++) [1, 2, 5].forEach((m) => ticks.push(m * Math.pow(10, p)));
@@ -77,6 +87,7 @@
         el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: "grid" }, f.svg);
         el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = fmtMoney(v);
       });
+    }
     xAxisMonths(f, B.dates, X);
     ["b25", "d1", "d5", "raw"].forEach((k) => {
       el("path", { d: V.eq[k].map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(""), class: k === "raw" ? "line-main" : "line-ctx" }, f.svg);
@@ -130,7 +141,7 @@
   function heatmap(host, B, V) {
     const years = [...new Set(B.months.map((m) => m.slice(0, 4)))];
     const val = {}; B.months.forEach((m, i) => { val[m] = V.mret[i]; });
-    const vmax = Math.max(...V.mret), dec = vmax < 20 ? 1 : 0;
+    const vmax = Math.max(...V.mret), dec = vmax < 40 ? 1 : 0;
     let h = '<table><thead><tr><th class="y"></th>' + MON.map((m) => `<th>${m}</th>`).join("") + "</tr></thead><tbody>";
     years.forEach((y) => {
       h += `<tr><th class="y">${y}</th>`;
@@ -225,5 +236,22 @@
   }
   fetch("versions.json?v=2").then((r) => r.json()).then((D) => {
     DATA = D; render(); strategies($("#strategies"), D.strategies);
-  }).catch((err) => { console.error(err); document.querySelectorAll(".chart-host,#heatmap,#calendar,#strategies").forEach((h) => { h.textContent = "Data couldn't load."; }); });
+  }).catch((err) => { console.error(err); document.querySelectorAll("#chart-equity,#chart-dd,#heatmap,#calendar,#strategies").forEach((h) => { h.textContent = "Data couldn't load."; }); });
+
+  // ---------- Alfred (second system) ----------
+  if ($("#al-equity")) fetch("alfred.json?v=1").then((r) => r.json()).then((A) => {
+    const B = A.base, V = A.versions.high, K = V.kpi;
+    const set = (k, v) => { const e = document.querySelector(`[data-akpi="${k}"]`); if (e) e.textContent = v; };
+    set("avg_month", `${K.avg_month.toFixed(1)}%`); set("mdd", `${K.mdd.toFixed(1)}%`); set("sharpe", K.sharpe.toFixed(2));
+    set("sortino", K.sortino.toFixed(1)); set("calmar", K.calmar.toFixed(1)); set("pf", K.pf.toFixed(2));
+    set("win", `${K.win.toFixed(0)}%`); set("trades", K.trades.toLocaleString("en-US")); set("pos_months", `${K.pos_months}/${K.n_months}`);
+    V.periods.forEach((p) => {
+      const g = document.querySelector(`[data-apg="${p.w}"]`), m = document.querySelector(`[data-apm="${p.w}"]`);
+      if (g) g.textContent = `${p.growth.toFixed(1)}%`; if (m) m.textContent = `${p.mdd.toFixed(1)}%`;
+    });
+    equity($("#al-equity"), B, V);
+    drawdown($("#al-dd"), B, V);
+    heatmap($("#al-heatmap"), B, V);
+    calendar($("#al-calendar"), V);
+  }).catch((err) => { console.error(err); document.querySelectorAll("#al-equity,#al-dd,#al-heatmap,#al-calendar").forEach((h) => { h.textContent = "Data couldn't load."; }); });
 })();

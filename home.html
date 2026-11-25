@@ -11,12 +11,12 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <header class="site"><div class="wrap">
 <a class="brand" href="#top">Nate Puangpanbut</a>
-<nav><a href="#quadbreak">QuadBreak</a><a href="#process">Process</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+<nav><a href="#quadbreak">QuadBreak</a><a href="#alfred">Alfred</a><a href="#process">Process</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
 </div></header>
 
 <main class="wrap" id="top">
@@ -134,6 +134,76 @@
 </div>
 </section>
 
+<section id="alfred">
+<h2>Alfred</h2>
+<p class="sub">My second system: a standalone intraday EA for gold that runs alongside QuadBreak.</p>
+
+<div class="qb al">
+<div class="qb-head">
+<div class="qb-brand"><div class="qb-logo">AL</div><div><div class="qb-name">Alfred <span>v1.01</span></div><div class="qb-tag">Intraday day-trading system · XAUUSD</div></div></div>
+<div class="qb-pills"><span class="pill">1 trade a day, max</span><span class="pill">Standalone EA</span><span class="pill">MQL5 · MetaTrader 5</span><span class="pill">Same research pipeline</span></div>
+</div>
+
+<p class="qb-intro">Alfred takes at most one trade a day. Its stop and end-of-day exit are managed automatically, and position size steps up after a loss within a hard cap. It went through the same pre-registered pipeline and 12-condition cost battery as QuadBreak. It wasn't merged into QuadBreak because it overlaps QuadBreak's breakout strategies (daily correlation ~0.45), so it runs as a separate EA and both are sized on their combined drawdown. A later 160-configuration re-tune failed its pre-set adoption rules, so the original settings were kept. Method and parameters are kept private.</p>
+
+<div class="qb-arch">
+<div class="mod"><div class="ic">◈</div><b>Signal</b><span>One intraday setup, first signal of the day only</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">◐</div><b>Risk</b><span>1% base risk · capped recovery sizing</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">▲</div><b>Execution</b><span>MQL5 expert advisor · MT5</span></div>
+<div class="arrow">→</div>
+<div class="mod"><div class="ic">◉</div><b>Exit</b><span>Automatic stop · flat by end of day</span></div>
+</div>
+
+<div class="qb-kpis">
+<div><span>Avg. monthly gain</span><b data-akpi="avg_month">–</b></div>
+<div><span>Max drawdown</span><b data-akpi="mdd">–</b></div>
+<div><span>Sharpe</span><b data-akpi="sharpe">–</b></div>
+<div><span>Sortino</span><b data-akpi="sortino">–</b></div>
+<div><span>Calmar</span><b data-akpi="calmar">–</b></div>
+<div><span>Profit factor</span><b data-akpi="pf">–</b></div>
+<div><span>Win rate</span><b data-akpi="win">–</b></div>
+<div><span>Trades</span><b data-akpi="trades">–</b></div>
+<div><span>Profitable months</span><b data-akpi="pos_months">–</b></div>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Equity <span class="muted">$1,000 start, fixed 1% base risk, no compounding</span></b>
+<div class="legend chart-legend"><span class="sw main"></span>Raw spread (worst) <span class="sw ctx"></span>Other 3 conditions</div>
+</div>
+<div class="chart-host" id="al-equity" aria-label="Alfred equity"></div>
+<div class="qb-card-head sub-head"><b>Drawdown <span class="muted">worst intraday drop from the running peak</span></b></div>
+<div class="chart-host" id="al-dd" aria-label="Alfred drawdown"></div>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Return by period</b><span class="muted">fresh $1,000 start · worst of the four conditions</span></div>
+<div class="tablewrap"><table class="qb-table periods" aria-label="Alfred results by period">
+<thead><tr><th>Period</th><th>Avg. monthly gain</th><th>Max drawdown</th></tr></thead>
+<tbody>
+<tr><td>2025 <em>out-of-sample</em></td><td data-apg="2025"></td><td data-apm="2025"></td></tr>
+<tr><td>Jan–Jun 2026 <em class="train">training</em></td><td data-apg="Train"></td><td data-apm="Train"></td></tr>
+<tr><td>Jul–Nov 2026 <em>out-of-sample</em></td><td data-apg="JulNov"></td><td data-apm="JulNov"></td></tr>
+</tbody>
+</table></div>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">% of the $1,000 start · raw-spread condition</span></div>
+<div id="al-heatmap" class="heat" aria-label="Alfred monthly returns"></div>
+</div>
+
+<div class="qb-card cal-card">
+<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">% of the $1,000 start · raw-spread condition</span></div>
+<div id="al-calendar" class="cal"></div>
+<div class="chart-tip cal-tip" hidden></div>
+</div>
+
+<p class="qb-foot">v1.01, simulated on tick data from Jan 2025 to Nov 12, 2026, with a fixed $10 base risk on $1,000 (no compounding), so monthly and daily returns are shown as a share of the $1,000 start. Stats use the raw-spread condition, the weakest of four tested. Sharpe and Sortino are annualized from daily returns. These are backtest results, not live performance, and simulated results don't guarantee future returns.</p>
+</div>
+</section>
+
 <section id="process">
 <h2>How every idea is tested</h2>
 <p class="sub">The same pipeline for every idea, with pass/fail rules written down before the test data is looked at. Most ideas don't survive it.</p>
@@ -188,14 +258,10 @@
 
 <section id="projects">
 <h2>Projects</h2>
-<p class="sub">Research beyond QuadBreak, including my second system Alfred, plus quant-relevant work from my roles and studies.</p>
+<p class="sub">Research beyond QuadBreak and Alfred, plus quant-relevant work from my roles and studies.</p>
 <div class="groups">
 <h3 class="group">Trading research</h3>
 <div class="cases">
-<div class="card case"><div class="tag">Standalone EA · MQL5</div>
-<h3>Alfred: a second, diversifying system</h3>
-<p>A standalone intraday system for gold that takes at most one trade a day, with an automatic stop, an end-of-day exit and capped loss-recovery sizing. It went through the same pre-registered pipeline and 12-condition battery as QuadBreak. It wasn't added to QuadBreak, because it overlaps its breakout legs (daily correlation ~0.45), so it runs alongside as a separate EA, sized on the combined drawdown. A later 160-configuration re-tune failed its pre-set adoption rules, so the original settings were kept.</p>
-<div class="result">Profitable in <b>every test period</b>, averaging <b>~10%/month</b> with a <b>Sharpe ratio of 2.1</b> and <b>28.4% max drawdown</b> (simulated, fixed 1% risk, no compounding)</div></div>
 <div class="card case"><div class="tag">Strategy research</div>
 <h3>Auditing 19 popular trading methods</h3>
 <p>I put 19 widely shared methods through the same pre-registered battery as my own ideas. They included ICT and fair-value-gap setups, supply-and-demand zones, market structure, Turtle rules, Heikin Ashi, volume profile and several paid-indicator proxies.</p>
@@ -324,6 +390,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=8"></script>
+<script src="charts.js?v=9"></script>
 </body>
 </html>
