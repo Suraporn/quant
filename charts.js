@@ -127,11 +127,11 @@
   }
   function green(t) {
     t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
-    return `rgb(${L(187, 21)},${L(247, 128)},${L(208, 61)})`;   // pale green -> deep green
+    return `rgb(${L(112, 22)},${L(180, 112)},${L(132, 56)})`;   // mid green -> deep green
   }
   function red(t) {
     t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
-    return `rgb(${L(254, 185)},${L(202, 28)},${L(202, 28)})`;  // pale red -> deep red
+    return `rgb(${L(214, 160)},${L(120, 26)},${L(120, 26)})`;  // mid red -> deep red
   }
   function blue(t) {
     t = Math.sqrt(Math.min(Math.max(t, 0), 1)); const L = (a, b) => Math.round(a + (b - a) * t);
@@ -150,8 +150,8 @@
         if (v === undefined) { h += '<td class="empty"></td>'; continue; }
         const partial = k === B.months[B.months.length - 1] ? " (to Nov 12)" : "";
         const t = v / vmax;
-        h += v < 0 ? `<td class="neg" style="background:${red(Math.min(-v / vmax * 3, 1))};color:${Math.sqrt(Math.min(-v / vmax * 3, 1)) > 0.5 ? "#fff" : "#3b0a0a"}" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}%</td>`
-                   : `<td style="background:${green(t)};color:${Math.sqrt(Math.max(t, 0)) > 0.5 ? "#fff" : "#06240f"}" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}%</td>`;
+        h += v < 0 ? `<td class="neg" style="background:${red(Math.min(-v / vmax * 3, 1))};color:#fff" title="${MON[m - 1]} ${y}${partial}: ${v.toFixed(1)}%">${v.toFixed(dec)}%</td>`
+                   : `<td style="background:${green(t)};color:#fff" title="${MON[m - 1]} ${y}${partial}: +${v.toFixed(1)}%">+${v.toFixed(dec)}%</td>`;
       }
       h += "</tr>";
     });
