@@ -25,7 +25,7 @@
 <div class="eyebrow">Quantitative Researcher · Algorithmic Trading · ML</div>
 <h1>Trading systems that are tested hard before they trade.</h1>
 <p class="lead">I'm a quantitative researcher and data scientist with 10+ years of experience in machine learning, statistical modeling and optimization. I&nbsp;design, backtest and run algorithmic trading systems end to end, from a tick-level research engine in Python to a live MQL5 system, and I use agentic AI workflows to move from idea to tested result quickly.</p>
-<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn primary" href="#alfred">See Alfred</a><a class="btn" href="files/resume.pdf?v=7" target="_blank">Download résumé</a></div>
+<div class="btns"><a class="btn primary" href="#quadbreak">See QuadBreak</a><a class="btn primary" href="#alfred">See Alfred</a><a class="btn" href="files/resume.pdf?v=8" target="_blank">Download résumé</a></div>
 <div class="socials">
 <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn ↗</a>
 <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio ↗</a>
@@ -156,16 +156,16 @@
 <div class="qb-pills"><span class="pill">1 trade a day, max</span><span class="pill">Standalone EA</span><span class="pill">MQL5 · MetaTrader 5</span><span class="pill live"><i></i>Live forward test</span></div>
 </div>
 
-<p class="qb-intro">Alfred takes at most one trade a day. Its stop, profit lock and end-of-day exit are managed automatically, and it trades smaller on days with below-usual market activity. It went through the same research pipeline and cost battery as QuadBreak, and runs as a separate EA because it overlaps QuadBreak's breakout strategies. Both are sized on their combined drawdown. Method and parameters are kept private.</p>
+<p class="qb-intro">Alfred takes at most one trade a day, with its stop, exits and position sizing managed automatically. It went through the same research pipeline and cost battery as QuadBreak and runs as a separate EA alongside it, with both sized on their combined drawdown. Method and parameters are kept private.</p>
 
 <div class="qb-arch">
-<div class="mod"><div class="ic">◈</div><b>Signal</b><span>One intraday setup, first signal of the day only</span></div>
+<div class="mod"><div class="ic">◈</div><b>Signal</b><span>One intraday setup per day</span></div>
 <div class="arrow">→</div>
-<div class="mod"><div class="ic">◐</div><b>Risk</b><span>1% of balance per trade (×0.25 on quiet days) · recovery ×1.5, up to 2 steps</span></div>
+<div class="mod"><div class="ic">◐</div><b>Risk</b><span>Compounding position sizing with built-in risk controls</span></div>
 <div class="arrow">→</div>
 <div class="mod"><div class="ic">▲</div><b>Execution</b><span>MQL5 expert advisor · MT5</span></div>
 <div class="arrow">→</div>
-<div class="mod"><div class="ic">◉</div><b>Exit</b><span>Automatic stop · profit lock at +3R · flat by end of day</span></div>
+<div class="mod"><div class="ic">◉</div><b>Exit</b><span>Automatic stop, profit protection and end-of-day exit</span></div>
 </div>
 
 <div class="qb-kpis">
@@ -179,7 +179,6 @@
 <div><span>Trades</span><b>472</b></div>
 <div><span>Profitable months</span><b>18/23</b></div>
 </div>
-<p class="al-settings"><b>Settings:</b> 1% of balance per trade (×0.25 on quiet days); recovery sizing ×1.5 up to 2 steps; profit lock at +3R. Compounding.</p>
 
 <div class="qb-card">
 <div class="qb-card-head"><b>Equity <span class="muted">growth of $1,000, log scale · compounding</span></b>
@@ -219,12 +218,12 @@
 <div class="qb-card-head"><b>Version history</b></div>
 <div class="vh">
 <div><b>v1.00</b><span>First standalone version, with an on-chart status panel</span></div>
-<div><b>v1.01</b><span>Renamed Alfred; today's stop and entry lines drawn on the chart; daily, monthly and all-time stats on the panel</span></div>
-<div class="now"><b>v1.02</b><span>Recovery sizing capped at 2 steps, profit lock at +3R and quiet-day sizing, cutting max drawdown from 41% to 19% · now forward-testing on a live account</span></div>
+<div><b>v1.01</b><span>Renamed Alfred; chart overlays and a fuller stats panel</span></div>
+<div class="now"><b>v1.02</b><span>New risk controls that cut max drawdown from 41% to 19% · now forward-testing on a live account</span></div>
 </div>
 </div>
 
-<p class="qb-foot">These are backtest results for Alfred v1.02 on tick data from Jan 2025 to Nov 12, 2026, with compounding at the settings above, not live performance; they were also reproduced in the MT5 Strategy Tester. Headline and period figures are the median of 4 cost/delay conditions; profitable months and the charts use the normal-cost condition. Sharpe and Sortino are annualized from daily returns. Live forward-test results will be added separately once there is enough history. Simulated results don't guarantee future returns.</p>
+<p class="qb-foot">These are backtest results for Alfred v1.02 on tick data from Jan 2025 to Nov 12, 2026, with compounding, not live performance; they were also reproduced in the MT5 Strategy Tester. Headline and period figures are the median of 4 cost/delay conditions; profitable months and the charts use the normal-cost condition. Sharpe and Sortino are annualized from daily returns. Live forward-test results will be added separately once there is enough history. Simulated results don't guarantee future returns.</p>
 </div>
 </section>
 
@@ -335,7 +334,7 @@
 
 <section id="experience">
 <h2>Experience</h2>
-<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=7" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
+<p class="sub">Quant-relevant highlights. Full details are in the <a href="files/resume.pdf?v=8" target="_blank">résumé</a> and my <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">data science portfolio</a>.</p>
 <div class="timeline">
 <div class="job"><div class="when">10/2025 – present</div><div>
 <h3>Data Analyst</h3><div class="org">Meta (via Tundra Technical Solutions) · Vancouver, BC</div>
