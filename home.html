@@ -11,7 +11,7 @@
 <link rel="icon" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -154,7 +154,7 @@
 <div class="qb al">
 <div class="qb-head">
 <div class="qb-brand"><div class="qb-logo">AL</div><div><div class="qb-name">Alfred <span>v1.02</span></div><div class="qb-tag">Day-trading system · XAUUSD</div></div></div>
-<div class="qb-pills"><span class="pill">1 trade a day, max</span><span class="pill">Standalone EA</span><span class="pill">MQL5 · MetaTrader 5</span><span class="pill">Backtest · MT5-checked</span></div>
+<div class="qb-pills"><span class="pill">1 trade a day, max</span><span class="pill">Standalone EA</span><span class="pill">MQL5 · MetaTrader 5</span><span class="pill live"><i></i>Live forward test</span></div>
 </div>
 
 <p class="qb-intro">Alfred takes at most one trade a day. Its stop, profit lock and end-of-day exit are managed automatically, and it trades smaller on days with below-usual market activity. It went through the same research pipeline and cost battery as QuadBreak, and runs as a separate EA because it overlaps QuadBreak's breakout strategies. Both are sized on their combined drawdown. Method and parameters are kept private.</p>
@@ -173,6 +173,7 @@
 <div><span>Avg. monthly gain</span><b class="up">8.4%</b></div>
 <div><span>Max drawdown</span><b class="dn">19.1%</b></div>
 <div><span>$1,000 becomes</span><b>$6,114</b></div>
+<div><span>Sharpe</span><b>2.65</b></div>
 <div><span>Trades</span><b>472</b></div>
 <div><span>Win rate</span><b>39%</b></div>
 <div><span>Profit factor</span><b>1.97</b></div>
@@ -180,35 +181,49 @@
 <p class="al-settings"><b>Settings:</b> 1% of balance per trade (×0.25 on quiet days); recovery sizing ×1.5 up to 2 steps; profit lock at +3R. Compounding.</p>
 
 <div class="qb-card">
+<div class="qb-card-head"><b>Equity <span class="muted">growth of $1,000, log scale · compounding</span></b>
+<div class="legend chart-legend"><span class="sw main"></span>Normal costs <span class="sw ctx"></span>Other 3 conditions</div>
+</div>
+<div class="chart-host" id="al-equity" aria-label="Alfred equity"></div>
+<div class="qb-card-head sub-head"><b>Drawdown <span class="muted">worst intraday drop from the running peak · normal costs</span></b></div>
+<div class="chart-host" id="al-dd" aria-label="Alfred drawdown"></div>
+</div>
+
+<div class="qb-card">
 <div class="qb-card-head"><b>Results by period</b><span class="muted">backtest · $1,000 at the start of each period · median of 4 cost/delay conditions</span></div>
 <div class="tablewrap"><table class="qb-table periods" aria-label="Alfred backtest results by period">
-<thead><tr><th>Period</th><th>Gain / month</th><th>Max drawdown</th><th>$1,000 becomes</th></tr></thead>
+<thead><tr><th>Period</th><th>Gain / month</th><th>Max drawdown</th><th>Sharpe</th><th>$1,000 becomes</th></tr></thead>
 <tbody>
-<tr><td>2025</td><td>4.2%</td><td>19.1%</td><td>$1,638</td></tr>
-<tr><td>Jan–Jun 2026</td><td>11.0%</td><td>10.5%</td><td>$1,863</td></tr>
-<tr><td>Jul–Nov 2026</td><td>16.5%</td><td>8.3%</td><td>$1,959</td></tr>
-<tr class="tot"><td>Whole period (23 months)</td><td>8.4%</td><td>19.1%</td><td>$6,114</td></tr>
+<tr><td>2025</td><td>4.2%</td><td>19.1%</td><td>1.58</td><td>$1,638</td></tr>
+<tr><td>Jan–Jun 2026</td><td>11.0%</td><td>10.5%</td><td>4.11</td><td>$1,863</td></tr>
+<tr><td>Jul–Nov 2026</td><td>16.5%</td><td>8.3%</td><td>3.48</td><td>$1,959</td></tr>
+<tr class="tot"><td>Whole period (23 months)</td><td>8.4%</td><td>19.1%</td><td>2.65</td><td>$6,114</td></tr>
 </tbody>
 </table></div>
 <p class="muted al-note">Worst of the 4 conditions: 2025 3.9% a month (21.6% max drawdown), Jan–Jun 2026 9.4% (11.1%), Jul–Nov 2026 15.3% (8.7%), whole period 7.5% (21.6%).</p>
 </div>
 
 <div class="qb-card">
-<div class="qb-card-head"><b>Confirmed in the MT5 Strategy Tester</b><span class="muted">default inputs · broker data · Jan 2025 – Nov 2026</span></div>
-<div class="tablewrap"><table class="qb-table periods" aria-label="Alfred MT5 Strategy Tester check">
-<thead><tr><th></th><th>MT5 Strategy Tester</th><th>Research backtest</th></tr></thead>
-<tbody>
-<tr><td>Gain / month</td><td>about 9.1%</td><td>8.4%</td></tr>
-<tr><td>Max drawdown</td><td>17.9%</td><td>19.1%</td></tr>
-<tr><td>Trades</td><td>475</td><td>472</td></tr>
-<tr><td>Win rate</td><td>38.5%</td><td>39%</td></tr>
-<tr><td>Profit factor</td><td>2.24</td><td>1.97</td></tr>
-</tbody>
-</table></div>
-<p class="muted al-note">Same trade count and win rate, and the same worst stretch (Aug–Nov 2025). The MT5 run covers about 2 more weeks.</p>
+<div class="qb-card-head"><b>Monthly returns</b><span class="muted">normal-cost condition</span></div>
+<div id="al-heatmap" class="heat" aria-label="Alfred monthly returns"></div>
 </div>
 
-<p class="qb-foot">These are backtest results for Alfred v1.02 on tick data from Jan 2025 to Nov 12, 2026, with compounding at the settings above, not live performance. The v1.02 settings were chosen with the whole period in view, so the periods above are not independent out-of-sample tests. Live or demo results will be added separately. Simulated results don't guarantee future returns.</p>
+<div class="qb-card cal-card">
+<div class="qb-card-head"><b>Daily P&amp;L</b><span class="muted">normal-cost condition</span></div>
+<div id="al-calendar" class="cal"></div>
+<div class="chart-tip cal-tip" hidden></div>
+</div>
+
+<div class="qb-card">
+<div class="qb-card-head"><b>Version history</b></div>
+<div class="vh">
+<div><b>v1.00</b><span>First standalone version, with an on-chart status panel</span></div>
+<div><b>v1.01</b><span>Renamed Alfred; today's stop and entry lines drawn on the chart; daily, monthly and all-time stats on the panel</span></div>
+<div class="now"><b>v1.02</b><span>Recovery sizing capped at 2 steps, profit lock at +3R and quiet-day sizing, cutting max drawdown from 41% to 19% · now forward-testing on a live account</span></div>
+</div>
+</div>
+
+<p class="qb-foot">These are backtest results for Alfred v1.02 on tick data from Jan 2025 to Nov 12, 2026, with compounding at the settings above, not live performance; they were also reproduced in the MT5 Strategy Tester. Headline and period figures are the median of 4 cost/delay conditions; charts show the normal-cost condition. The v1.02 settings were chosen with the whole period in view, so the periods above are not independent out-of-sample tests. Live forward-test results will be added separately once there is enough history. Simulated results don't guarantee future returns.</p>
 </div>
 </section>
 
@@ -386,6 +401,6 @@
 <div><a href="mailto:nate.puangpanbut@gmail.com">nate.puangpanbut@gmail.com</a> · <a href="https://www.linkedin.com/in/suraporn/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Suraporn" target="_blank" rel="noopener">GitHub</a> · <a href="https://suraporn.github.io/ds/" target="_blank" rel="noopener">Data science portfolio</a></div>
 </div></footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="charts.js?v=13"></script>
+<script src="charts.js?v=15"></script>
 </body>
 </html>
