@@ -40,11 +40,12 @@
     });
   }
   function periodBands(f, dates, X, labels = true) {
+    const BL = Array.isArray(labels) ? labels : [];
     const i0 = dates.findIndex((d) => d >= "2026-01-01"), i1 = dates.findIndex((d) => d >= "2026-07-01");
     el("rect", { x: X(i0), y: f.y0, width: X(i1) - X(i0), height: f.y1 - f.y0, class: "band" }, f.svg);
     if (!labels) return;
     [i0, i1].forEach((i) => el("line", { x1: X(i), x2: X(i), y1: f.y0 - 16, y2: f.y1, class: "band-edge" }, f.svg));
-    [[(BL || [])[0] || "Test 2025", 0, i0], [(BL || [])[1] || "Training · Jan–Jun 2026", i0, i1], [(BL || [])[2] || "Test 2026", i1, dates.length - 1]].forEach(([t, a, b]) =>
+    [[BL[0] || "Test 2025", 0, i0], [BL[1] || "Training · Jan–Jun 2026", i0, i1], [BL[2] || "Test 2026", i1, dates.length - 1]].forEach(([t, a, b]) =>
       el("text", { x: (X(a) + X(b)) / 2, y: f.y0 - 6, class: "band-label", "text-anchor": "middle" }, f.svg).textContent = t);
   }
   function hover(f, n, X, onMove, extra = []) {
@@ -69,7 +70,7 @@
     if (V.scale === "linear") {
       const step = 500, lo = Math.floor(Math.min(...all) / step) * step, hi = Math.ceil(Math.max(...all) * 1.04 / step) * step;
       Y = (v) => f.y1 - (f.y1 - f.y0) * (v - lo) / (hi - lo);
-      periodBands(f, B.dates, X, B.bandLabels);
+      periodBands(f, B.dates, X, B.bandLabels || true);
       for (let v = lo; v <= hi; v += step) {
         el("line", { x1: f.x0, x2: f.x1, y1: Y(v), y2: Y(v), class: "grid" }, f.svg);
         el("text", { x: f.x0 - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, f.svg).textContent = `$${v.toLocaleString("en-US")}`;
@@ -78,7 +79,7 @@
     const lo = Math.log10(Math.min(...all) * 0.9);
     const hi = Math.log10(Math.max(...all) * 1.15);
     Y = (v) => f.y1 - (f.y1 - f.y0) * (Math.log10(Math.max(v, 1)) - lo) / (hi - lo);
-    periodBands(f, B.dates, X, B.bandLabels);
+    periodBands(f, B.dates, X, B.bandLabels || true);
     const ticks = [];
     for (let p = Math.floor(lo); p <= Math.ceil(hi); p++) [1, 2, 5].forEach((m) => ticks.push(m * Math.pow(10, p)));
     const span = hi - lo, keep = span > 2.5 ? [1] : [1, 2, 5];
